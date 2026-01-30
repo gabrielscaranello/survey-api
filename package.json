@@ -1,0 +1,59 @@
+{
+  "name": "gjs-survey-api",
+  "version": "1.0.0",
+  "description": "Backend application for Survey",
+  "main": "src/main/index.ts",
+  "repository": "https://github.com/gabrielscaranello/survey-api",
+  "author": "Gabriel Scaranello <gabrieljscaranello@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "dotenvx run -- ts-node-dev --inspect -T --ignore-watch node_modules --respawn src/main",
+    "start": "node dist/main",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "format": "prettier --write \"**/*.{ts,md,json}\" --ignore-path .gitignore",
+    "lint": "eslint --ext .ts --ignore-path .gitignore .",
+    "test": "dotenvx run --env-file=.env.test -- vitest run --passWithNoTests",
+    "test:unit": "vitest --passWithNoTests -c vitest.unit.config.mts --watch",
+    "test:integration": "dotenvx run --env-file=.env.test -- vitest -c vitest.integration.config.mts --watch",
+    "test:ci": "yarn test --coverage",
+    "test:ui": "dotenvx run --env-file=.env.test -- vitest --watch --ui",
+    "test:debug": "yarn test --inspect-brk --no-file-parallelism --inspect --logHeapUsage",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "module-alias": "^2.2.3"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^1.52.0",
+    "@eslint/js": "^9.39.2",
+    "@faker-js/faker": "^10.2.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
+    "@types/module-alias": "^2.0.4",
+    "@types/node": "^24.10.9",
+    "@vitest/coverage-istanbul": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "eslint": "^9.39.2",
+    "eslint-config-love": "^149.0.0",
+    "git-commit-msg-linter": "^5.0.8",
+    "globals": "^17.2.0",
+    "husky": "^9.1.7",
+    "jiti": "^2.6.1",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.1.2",
+    "supertest": "^7.2.2",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0",
+    "vitest": "^4.0.18",
+    "vitest-mock-extended": "^3.1.0"
+  },
+  "packageManager": "yarn@4.12.0",
+  "engines": {
+    "node": "24"
+  }
+}
