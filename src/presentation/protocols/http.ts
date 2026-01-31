@@ -1,6 +1,7 @@
 export enum HTTPStatusCode {
   OK = 200,
-  BAD_REQUEST = 400
+  BAD_REQUEST = 400,
+  SERVER_ERROR = 500
 }
 
 export interface HttpRequest<T = any> {
