@@ -1,4 +1,5 @@
 import { MissingParamError } from '../errors'
+import { HTTPStatusCode } from '../protocols'
 import { SignupController } from './signup'
 
 describe('SignUp Controller', () => {
@@ -13,7 +14,7 @@ describe('SignUp Controller', () => {
     }
 
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.statusCode).toBe(HTTPStatusCode.BAD_REQUEST)
     expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
@@ -28,7 +29,7 @@ describe('SignUp Controller', () => {
     }
 
     const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.statusCode).toBe(HTTPStatusCode.BAD_REQUEST)
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 })
