@@ -15,6 +15,7 @@ export default defineConfig([
   [love],
   {
     rules: {
+      '@typescript-eslint/class-methods-use-this': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/strict-boolean-expressions': 'off'
