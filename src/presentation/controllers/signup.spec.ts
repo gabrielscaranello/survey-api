@@ -1,4 +1,4 @@
-import { InvalidParamError, MissingParamError } from '../errors'
+import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 import { HTTPStatusCode, type EmailValidator } from '../protocols'
 import { SignupController } from './signup'
 
@@ -119,5 +119,25 @@ describe('SignUp Controller', () => {
 
     sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email)
+  })
+
+  it('should return 500 if emailValidator throws', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    vi.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const httpResponse = sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(HTTPStatusCode.SERVER_ERROR)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
