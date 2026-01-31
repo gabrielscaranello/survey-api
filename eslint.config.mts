@@ -12,5 +12,10 @@ export default defineConfig([
     languageOptions: { globals: globals.node }
   },
   tseslint.configs.recommendedTypeChecked,
-  [love]
+  [love],
+  {
+    rules: {
+      '@typescript-eslint/strict-boolean-expressions': 'off'
+    }
+  }
 ])
