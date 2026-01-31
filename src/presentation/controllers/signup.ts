@@ -1,11 +1,10 @@
 import { InvalidParamError, MissingParamError, ServerError } from '../errors'
-import { badRequest } from '../helpers/http-helper'
-import {
-  HTTPStatusCode,
-  type Controller,
-  type EmailValidator,
-  type HttpRequest,
-  type HttpResponse
+import { badRequest, serverError } from '../helpers/http-helper'
+import type {
+  Controller,
+  EmailValidator,
+  HttpRequest,
+  HttpResponse
 } from '../protocols'
 
 export class SignupController implements Controller {
@@ -31,10 +30,7 @@ export class SignupController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
     } catch {
-      return {
-        statusCode: HTTPStatusCode.SERVER_ERROR,
-        body: new ServerError()
-      }
+      return serverError()
     }
   }
 }
