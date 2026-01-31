@@ -1,5 +1,10 @@
-import { InvalidParamError, MissingParamError, ServerError } from '../errors'
-import { HTTPStatusCode, type EmailValidator } from '../protocols'
+import {
+  InvalidParamError,
+  MissingParamError,
+  ServerError
+} from '@/presentation/errors'
+import { HTTPStatusCode, type EmailValidator } from '@/presentation/protocols'
+
 import { SignupController } from './signup'
 
 interface SutTypes {
