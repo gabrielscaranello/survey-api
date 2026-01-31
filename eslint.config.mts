@@ -15,6 +15,7 @@ export default defineConfig([
   [love],
   {
     rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/strict-boolean-expressions': 'off'
     }
   }
