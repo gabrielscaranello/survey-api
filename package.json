@@ -14,7 +14,7 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "typecheck": "tsc",
     "format": "prettier --write \"**/*.{ts,md,json}\" --ignore-path .gitignore",
-    "lint": "eslint --ext .ts --ignore-path .gitignore .",
+    "lint": "eslint --ext .ts .",
     "test": "dotenvx run --env-file=.env.test -- vitest run --passWithNoTests",
     "test:unit": "vitest --passWithNoTests -c vitest.unit.config.mts --watch",
     "test:integration": "dotenvx run --env-file=.env.test -- vitest -c vitest.integration.config.mts --watch",

@@ -1,10 +1,11 @@
 import js from '@eslint/js'
 import love from 'eslint-config-love'
-import { defineConfig } from 'eslint/config'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig([
+  globalIgnores(['.yarn/*', '.pnp.*', 'coverage', 'dist', 'node_modules']),
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
     plugins: { js },
@@ -18,7 +19,8 @@ export default defineConfig([
       '@typescript-eslint/class-methods-use-this': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/strict-boolean-expressions': 'off'
+      '@typescript-eslint/prefer-destructuring': 'off',
+      '@typescript-eslint/strict-boolean-expressions': 'off',
     }
   }
 ])
