@@ -1,13 +1,17 @@
-import type { AccountModel } from '@/domain/models'
-import type { AddAccount, AddAccountModel } from '@/domain/usecases'
 import {
   InvalidParamError,
   MissingParamError,
   ServerError
 } from '@/presentation/errors'
-import { HTTPStatusCode, type EmailValidator } from '@/presentation/protocols'
 
 import { SignupController } from './signup'
+import {
+  HTTPStatusCode,
+  type AccountModel,
+  type AddAccount,
+  type AddAccountModel,
+  type EmailValidator
+} from './signup.protocols.ts'
 
 interface SutTypes {
   sut: SignupController
