@@ -1,10 +1,10 @@
 import { DbAddAccount } from './db-add-account'
-import type { Hasher } from './db-add-account.protocols'
-
-interface SutTypes {
-  hasherStub: Hasher
-  sut: DbAddAccount
-}
+import type {
+  AccountModel,
+  AddAccountModel,
+  AddAccountRepository,
+  Hasher
+} from './db-add-account.protocols'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -16,11 +16,35 @@ const makeHasher = (): Hasher => {
   return new HasherStub()
 }
 
+const makeAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add(_data: AddAccountModel): Promise<AccountModel> {
+      const fakeAccount: AccountModel = {
+        id: 'any_id',
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'hashed_value'
+      }
+
+      return await Promise.resolve(fakeAccount)
+    }
+  }
+
+  return new AddAccountRepositoryStub()
+}
+
+interface SutTypes {
+  sut: DbAddAccount
+  hasherStub: Hasher
+  addAccountRepositoryStub: AddAccountRepository
+}
+
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher()
-  const sut = new DbAddAccount(hasherStub)
+  const addAccountRepositoryStub = makeAddAccountRepository()
+  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
 
-  return { sut, hasherStub }
+  return { sut, hasherStub, addAccountRepositoryStub }
 }
 
 describe('DbAddAccount UseCase', () => {
@@ -48,5 +72,22 @@ describe('DbAddAccount UseCase', () => {
     })
 
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addSpy = vi.spyOn(addAccountRepositoryStub, 'add')
+
+    await sut.add({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+
+    expect(addSpy).toBeCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'hashed_value'
+    })
   })
 })
