@@ -1,6 +1,6 @@
 import { BcryptAdapter } from './bcrypt.adapter'
 
-const mockedHash = vi.fn()
+const mockedHash = vi.fn().mockReturnValue('hashed_value')
 
 vi.mock('bcrypt', () => ({
   hash: (...args: []): any => mockedHash(...args)
@@ -24,5 +24,12 @@ describe('Bcrypt Adapter', () => {
     await sut.hash('any_value')
 
     expect(mockedHash).toHaveBeenCalledWith('any_value', salt)
+  })
+
+  it('should return a hash on success', async () => {
+    const { sut } = makeSut()
+    const hash = await sut.hash('any_value')
+
+    expect(hash).toBe('hashed_value')
   })
 })
