@@ -14,6 +14,7 @@ export default defineConfig({
     globals: true,
     root: resolve(__dirname),
     environment: 'node',
+    setupFiles: ['./test-setup/mongo-memory-server.ts'],
     coverage: {
       provider: 'istanbul',
       cleanOnRerun: true,

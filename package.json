@@ -27,6 +27,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "module-alias": "^2.2.3",
+    "mongodb": "^7.0.0",
     "validator": "^13.15.26"
   },
   "devDependencies": {
@@ -55,7 +56,8 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0",
     "vitest": "^4.0.18",
-    "vitest-mock-extended": "^3.1.0"
+    "vitest-mock-extended": "^3.1.0",
+    "vitest-mongodb": "^1.0.3"
   },
   "packageManager": "yarn@4.12.0",
   "engines": {
