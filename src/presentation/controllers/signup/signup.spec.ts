@@ -232,4 +232,26 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(HTTPStatusCode.SERVER_ERROR)
     expect(httpResponse.body).toEqual(new ServerError())
   })
+
+  it('should return 200 if account is created', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const httpResponse = sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(HTTPStatusCode.CREATED)
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid@mail.com',
+      password: 'valid_password'
+    })
+  })
 })
