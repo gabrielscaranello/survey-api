@@ -10,5 +10,5 @@ export interface HttpRequest<T = any> {
 
 export interface HttpResponse<T = any> {
   statusCode: HTTPStatusCode
-  body: T
+  body?: T
 }
