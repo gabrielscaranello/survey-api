@@ -37,4 +37,17 @@ describe('DbAddAccount UseCase', () => {
 
     expect(hasherSpy).toBeCalledWith('any_password')
   })
+
+  it('should throw if Hasher throws', async () => {
+    const { sut, hasherStub } = makeSut()
+    vi.spyOn(hasherStub, 'hash').mockRejectedValueOnce(new Error())
+
+    const promise = sut.add({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+
+    await expect(promise).rejects.toThrow()
+  })
 })
