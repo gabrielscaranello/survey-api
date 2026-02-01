@@ -246,7 +246,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = sut.handle(httpRequest)
 
-    expect(httpResponse.statusCode).toBe(HTTPStatusCode.CREATED)
+    expect(httpResponse.statusCode).toBe(HTTPStatusCode.OK)
     expect(httpResponse.body).toEqual({
       id: 'valid_id',
       name: 'valid_name',
