@@ -21,6 +21,7 @@
     "test:ci": "yarn test --coverage",
     "test:ui": "dotenvx run --env-file=.env.test -- vitest --watch --ui",
     "test:debug": "yarn test --inspect-brk --no-file-parallelism --inspect --logHeapUsage",
+    "test:changed": "yarn test --changed",
     "prepare": "husky"
   },
   "dependencies": {
