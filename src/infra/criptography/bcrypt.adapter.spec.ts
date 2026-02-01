@@ -32,4 +32,13 @@ describe('Bcrypt Adapter', () => {
 
     expect(hash).toBe('hashed_value')
   })
+
+  it('should throw if bcrypt throws', async () => {
+    mockedHash.mockRejectedValueOnce(new Error())
+    const { sut } = makeSut()
+
+    const promise = sut.hash('any_value')
+
+    await expect(promise).rejects.toThrow()
+  })
 })
