@@ -10,7 +10,9 @@ import {
   type AccountModel,
   type AddAccount,
   type AddAccountModel,
-  type EmailValidator
+  type EmailValidator,
+  type HttpRequest,
+  type SignUpRequest
 } from './signup.protocols.ts'
 
 interface SutTypes {
@@ -57,8 +59,9 @@ const makeSut = (): SutTypes => {
 describe('SignUp Controller', () => {
   it('should return 400 if no name is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignUpRequest> = {
       body: {
+        name: '',
         email: 'any_email@mail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password'
@@ -73,9 +76,10 @@ describe('SignUp Controller', () => {
 
   it('should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignUpRequest> = {
       body: {
         name: 'any_name',
+        email: '',
         password: 'any_password',
         passwordConfirmation: 'any_password'
       }
@@ -89,10 +93,11 @@ describe('SignUp Controller', () => {
 
   it('should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignUpRequest> = {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com',
+        password: '',
         passwordConfirmation: 'any_password'
       }
     }
@@ -105,11 +110,12 @@ describe('SignUp Controller', () => {
 
   it('should return 400 if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignUpRequest> = {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com',
-        password: 'any_password'
+        password: 'any_password',
+        passwordConfirmation: ''
       }
     }
 

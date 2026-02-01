@@ -5,7 +5,7 @@ export enum HTTPStatusCode {
 }
 
 export interface HttpRequest<T = any> {
-  body?: T
+  body: T
 }
 
 export interface HttpResponse<T = any> {
