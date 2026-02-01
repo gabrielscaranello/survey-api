@@ -30,4 +30,13 @@ describe('Email Validator Adapter', () => {
 
     expect(isValid).toBe(true)
   })
+
+  it('should call validator with correct email', () => {
+    const sut = makeSut()
+    const email = 'any@mail.com'
+
+    sut.isValid(email)
+
+    expect(mockedIsEmail).toHaveBeenCalledWith(email)
+  })
 })
