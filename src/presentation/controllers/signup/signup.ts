@@ -1,12 +1,13 @@
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers'
 
-import type {
-  AddAccount,
-  Controller,
-  EmailValidator,
-  HttpRequest,
-  HttpResponse
+import {
+  HTTPStatusCode,
+  type AddAccount,
+  type Controller,
+  type EmailValidator,
+  type HttpRequest,
+  type HttpResponse
 } from './signup.protocols.ts'
 
 export class SignupController implements Controller {
@@ -41,7 +42,9 @@ export class SignupController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
 
-      this.addAccount.add({ name, email, password })
+      const account = this.addAccount.add({ name, email, password })
+
+      return { body: account, statusCode: HTTPStatusCode.CREATED }
     } catch {
       return serverError()
     }
