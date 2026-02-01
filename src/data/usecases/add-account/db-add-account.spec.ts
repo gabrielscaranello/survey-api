@@ -90,4 +90,17 @@ describe('DbAddAccount UseCase', () => {
       password: 'hashed_value'
     })
   })
+
+  it('should throw if AddAccountRepository throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    vi.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(new Error())
+
+    const promise = sut.add({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+
+    await expect(promise).rejects.toThrow()
+  })
 })
