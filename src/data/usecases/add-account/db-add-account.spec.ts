@@ -1,6 +1,5 @@
-import type { Hasher } from '@/data/protocols'
-
 import { DbAddAccount } from './db-add-account'
+import type { Hasher } from './db-add-account.protocols'
 
 interface SutTypes {
   hasherStub: Hasher
