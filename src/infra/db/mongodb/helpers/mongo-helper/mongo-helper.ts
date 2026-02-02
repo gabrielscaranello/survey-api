@@ -1,20 +1,27 @@
 import { MongoClient, type Collection } from 'mongodb'
 
+let _client: null | MongoClient = null
+
 export const MongoHelper = {
-  client: null as null | MongoClient,
+  get client(): MongoClient | null {
+    return _client
+  },
 
   async connect(uri: string): Promise<void> {
-    this.client = await MongoClient.connect(uri)
+    _client = await MongoClient.connect(uri)
   },
 
   async disconnect(): Promise<void> {
-    await this.client?.close()
-    this.client = null
+    if (!this.client) {
+      return
+    }
+    await this.client.close()
+    _client = null
   },
 
   getCollection(name: string): Collection {
     if (!this.client) {
-      throw new Error('Error to connect to db')
+      throw new Error('MongoClient not connected')
     }
     return this.client.db().collection(name)
   }
