@@ -27,6 +27,6 @@
     },
     "types": ["vitest/globals"]
   },
-  "include": ["src", "test-setup", "*.config.*"],
+  "include": ["src", "setup-test", "*.config.*"],
   "exclude": ["node_modules", "dist"]
 }
