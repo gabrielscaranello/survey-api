@@ -12,6 +12,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    clearMocks: true,
     root: resolve(__dirname),
     environment: 'node',
     setupFiles: ['./test-setup/mongo-memory-server.ts'],
