@@ -9,8 +9,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "dev": "dotenvx run -- ts-node-dev --inspect -T --ignore-watch node_modules --respawn src/main",
-    "start": "node dist/main",
+    "dev": "dotenvx run -- ts-node-dev --inspect -T --ignore-watch node_modules --respawn src/main/server.ts",
+    "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "typecheck": "tsc",
     "format": "prettier --write \"**/*.{ts,md,json}\" --ignore-path .gitignore",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
     "module-alias": "^2.2.3",
     "mongodb": "^7.0.0",
     "validator": "^13.15.26"
@@ -36,6 +37,7 @@
     "@faker-js/faker": "^10.2.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@types/bcrypt": "^6",
+    "@types/express": "^5",
     "@types/module-alias": "^2.0.4",
     "@types/node": "^24.10.9",
     "@types/validator": "^13",
