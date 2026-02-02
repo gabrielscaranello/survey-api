@@ -21,6 +21,8 @@ export default defineConfig([
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/prefer-destructuring': 'off',
       '@typescript-eslint/strict-boolean-expressions': 'off',
+
+      'require-unicode-regexp': 'off'
     }
   }
 ])
