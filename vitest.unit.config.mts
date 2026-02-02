@@ -6,7 +6,7 @@ export default mergeConfig(
   vitestConfig,
   defineConfig({
     test: {
-      exclude: [...configDefaults.exclude, 'tests/**/*.test.ts']
+      exclude: [...configDefaults.exclude, '**/*.test.ts']
     }
   })
 )
