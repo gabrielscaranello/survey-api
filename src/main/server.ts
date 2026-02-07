@@ -6,8 +6,8 @@ const main = async (): Promise<void> => {
 
   const { app } = await import('./config/app')
 
-  app.listen(env.port, () => {
-    process.stdout.write(`Server running at http://localhost:${env.port}\n`)
+  app.listen(env.app.port, () => {
+    process.stdout.write(`Server running at http://localhost:${env.app.port}\n`)
   })
 }
 
