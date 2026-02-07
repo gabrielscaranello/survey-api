@@ -22,20 +22,19 @@ describe('Mongo Helper', () => {
     mockedConnect.mockImplementation(() => mockedClient)
   })
 
-  afterEach(async () => {
-    await MongoHelper.disconnect()
-  })
-
   describe('connect', () => {
     it('should call connect with correct uri', async () => {
       await MongoHelper.connect('any_url')
+
       expect(mockedConnect).toHaveBeenCalledWith('any_url')
+      await MongoHelper.disconnect()
     })
 
     it('should define client on success', async () => {
       await MongoHelper.connect('any_url')
 
       expect(MongoHelper.client).toEqual(mockedClient)
+      await MongoHelper.disconnect()
     })
 
     it('should throw if MongoClient throws', async () => {
@@ -44,6 +43,13 @@ describe('Mongo Helper', () => {
       const promise = MongoHelper.connect('any_url')
 
       await expect(promise).rejects.toThrow()
+    })
+
+    it('should no make multiple connections when connect is called multiple times', async () => {
+      await MongoHelper.connect('any_url')
+      await MongoHelper.connect('any_url')
+
+      expect(mockedConnect).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -54,6 +60,7 @@ describe('Mongo Helper', () => {
 
       expect(mockedClose).toHaveBeenCalled()
       expect(MongoHelper.client).toBeNull()
+      expect(MongoHelper.connecting).toBe(false)
     })
 
     it('should no call client.close if client is not defined', async () => {
@@ -69,14 +76,16 @@ describe('Mongo Helper', () => {
       const promise = MongoHelper.disconnect()
 
       await expect(promise).rejects.toThrow()
+      await MongoHelper.disconnect()
     })
   })
 
   describe('getCollection', () => {
-    it('should throw if client is not defined', () => {
+    it('should throw if client is not defined', async () => {
       const callback = (): any => MongoHelper.getCollection('any_collection')
 
       expect(callback).toThrow()
+      await MongoHelper.disconnect()
     })
 
     it('should call client.db with correct values', async () => {
@@ -84,6 +93,7 @@ describe('Mongo Helper', () => {
       MongoHelper.getCollection('any_collection')
 
       expect(mockedCollection).toHaveBeenCalledWith('any_collection')
+      await MongoHelper.disconnect()
     })
 
     it('should throw if client.db() throws', async () => {
@@ -95,6 +105,7 @@ describe('Mongo Helper', () => {
       const callback = (): any => MongoHelper.getCollection('any_collection')
 
       expect(callback).toThrow()
+      await MongoHelper.disconnect()
     })
   })
 })
