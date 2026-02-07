@@ -1,11 +1,11 @@
 import express from 'express'
 
 import { setupMiddlewares } from './middlewares'
-
-export const port = 5050
+import { setupRoutes } from './routes'
 
 const app = express()
 
 setupMiddlewares(app)
+setupRoutes(app)
 
 export { app }
