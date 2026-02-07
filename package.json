@@ -9,7 +9,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "dev": "dotenvx run -- ts-node-dev --inspect -T --ignore-watch node_modules --respawn src/main/server.ts",
+    "dev": "dotenvx run -- ts-node-dev --inspect -T --quiet --watch src --respawn src/main/server.ts",
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "typecheck": "tsc",
