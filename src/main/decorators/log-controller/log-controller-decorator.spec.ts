@@ -1,3 +1,5 @@
+import type { LogErrorRepository } from '@/data/protocols'
+import { serverError } from '@/presentation/helpers'
 import {
   HTTPStatusCode,
   type Controller,
@@ -16,6 +18,12 @@ const makeHttpResponse = (): HttpResponse => ({
   body: { foo: 'bar' }
 })
 
+const makeError = (): Error => {
+  const error = new Error()
+  error.stack = 'any_stack'
+  return error
+}
+
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle(_: HttpRequest): Promise<HttpResponse> {
@@ -26,16 +34,28 @@ const makeController = (): Controller => {
   return new ControllerStub()
 }
 
+const makeLogErrorRepository = (): LogErrorRepository => {
+  class LogErrorRepositoryStub implements LogErrorRepository {
+    async logError(_stack: string): Promise<void> {
+      await Promise.resolve()
+    }
+  }
+
+  return new LogErrorRepositoryStub()
+}
+
 interface SutTypes {
   sut: LogControllerDecorator
   controllerStub: Controller
+  logErrorRepositoryStub: LogErrorRepository
 }
 
 const makeSut = (): SutTypes => {
   const controllerStub = makeController()
-  const sut = new LogControllerDecorator(controllerStub)
+  const logErrorRepositoryStub = makeLogErrorRepository()
+  const sut = new LogControllerDecorator(controllerStub, logErrorRepositoryStub)
 
-  return { sut, controllerStub }
+  return { sut, controllerStub, logErrorRepositoryStub }
 }
 
 describe('Log Controller Decorator', () => {
@@ -56,5 +76,16 @@ describe('Log Controller Decorator', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(makeHttpResponse())
+  })
+
+  it('should call LogErrorRepository with correct error if controller returns a server error', async () => {
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
+    const error = makeError()
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(error))
+    const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
+
+    await sut.handle(makeHttpRequest())
+
+    expect(logSpy).toHaveBeenCalledWith(error.stack)
   })
 })
