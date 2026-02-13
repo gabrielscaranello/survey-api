@@ -1,0 +1,34 @@
+import type { Collection } from 'mongodb'
+
+import { MongoHelper } from '@/infra/db/mongodb/helpers'
+
+import { LogMongoRepository } from './log-mongo.repository'
+
+const makeSut = (): LogMongoRepository => new LogMongoRepository()
+
+describe('Log Mongo Repository', () => {
+  /* eslint-disable-next-line @typescript-eslint/init-declarations --
+   * value is been defined in beforeAll */
+  let errorCollection: Collection
+
+  beforeAll(async () => {
+    await MongoHelper.connect(globalThis.__MONGO_URI__)
+    errorCollection = MongoHelper.getCollection('errors')
+  })
+
+  afterAll(async () => {
+    await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    await errorCollection.deleteMany({})
+  })
+
+  it('should create an error log on success', async () => {
+    const sut = makeSut()
+    await sut.logError('any_stack')
+
+    const count = await errorCollection.countDocuments()
+    expect(count).toBe(1)
+  })
+})
