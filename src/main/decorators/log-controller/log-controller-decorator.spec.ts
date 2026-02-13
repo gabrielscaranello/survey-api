@@ -88,4 +88,14 @@ describe('Log Controller Decorator', () => {
 
     expect(logSpy).toHaveBeenCalledWith(error.stack)
   })
+
+  it('should not call LogErrorRepository if server error has not body', async () => {
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(null))
+    const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
+
+    await sut.handle(makeHttpRequest())
+
+    expect(logSpy).not.toHaveBeenCalled()
+  })
 })
