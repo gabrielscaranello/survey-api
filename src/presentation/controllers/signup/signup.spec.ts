@@ -21,6 +21,12 @@ interface SutTypes {
   addAccountStub: AddAccount
 }
 
+const makeError = (): Error => {
+  const error = new Error()
+  error.stack = 'any_stack'
+  return error
+}
+
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid(_email: string): boolean {
@@ -183,7 +189,7 @@ describe('SignUp Controller', () => {
   it('should return 500 if emailValidator throws', async () => {
     const { sut, emailValidatorStub } = makeSut()
     vi.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
-      throw new Error()
+      throw makeError()
     })
     const httpRequest = {
       body: {
@@ -197,7 +203,7 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(HTTPStatusCode.SERVER_ERROR)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual(new ServerError(makeError().stack))
   })
 
   it('should call AddAccont with correct values', async () => {
@@ -222,7 +228,7 @@ describe('SignUp Controller', () => {
 
   it('should return 500 if addAccount throws', async () => {
     const { sut, addAccountStub } = makeSut()
-    vi.spyOn(addAccountStub, 'add').mockRejectedValueOnce(new Error())
+    vi.spyOn(addAccountStub, 'add').mockRejectedValueOnce(makeError())
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -235,7 +241,7 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(HTTPStatusCode.SERVER_ERROR)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual(new ServerError(makeError().stack))
   })
 
   it('should return 200 if account is created', async () => {

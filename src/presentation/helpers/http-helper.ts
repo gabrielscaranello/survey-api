@@ -11,7 +11,7 @@ export const badRequest = (error: Error): HttpResponse<Error> => ({
   body: error
 })
 
-export const serverError = (): HttpResponse<Error> => ({
+export const serverError = (error: unknown): HttpResponse<Error> => ({
   statusCode: HTTPStatusCode.SERVER_ERROR,
-  body: new ServerError()
+  body: new ServerError(error instanceof Error ? error.stack : '')
 })
