@@ -1,10 +1,9 @@
 import type { LogErrorRepository } from '@/data/protocols'
-import { serverError } from '@/presentation/helpers'
-import {
-  HTTPStatusCode,
-  type Controller,
-  type HttpRequest,
-  type HttpResponse
+import { ok, serverError } from '@/presentation/helpers'
+import type {
+  Controller,
+  HttpRequest,
+  HttpResponse
 } from '@/presentation/protocols'
 
 import { LogControllerDecorator } from './log-controller.decorator'
@@ -13,10 +12,7 @@ const makeHttpRequest = (): HttpRequest => ({
   body: { foo: 'bar' }
 })
 
-const makeHttpResponse = (): HttpResponse => ({
-  statusCode: HTTPStatusCode.OK,
-  body: { foo: 'bar' }
-})
+const makeHttpResponse = (): HttpResponse => ok({ foo: 'bar' })
 
 const makeError = (): Error => {
   const error = new Error()
@@ -92,6 +88,16 @@ describe('Log Controller Decorator', () => {
   it('should not call LogErrorRepository if server error has not body', async () => {
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
     vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(null))
+    const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
+
+    await sut.handle(makeHttpRequest())
+
+    expect(logSpy).not.toHaveBeenCalled()
+  })
+
+  it('should not call LogErrorRepository if controller does not return a server error', async () => {
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(makeHttpResponse())
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
     await sut.handle(makeHttpRequest())
