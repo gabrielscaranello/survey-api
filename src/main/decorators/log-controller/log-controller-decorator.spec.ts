@@ -75,8 +75,8 @@ describe('Log Controller Decorator', () => {
   })
 
   it('should call LogErrorRepository with correct error if controller returns a server error', async () => {
-    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
     const error = makeError()
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
     vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(error))
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
@@ -85,9 +85,21 @@ describe('Log Controller Decorator', () => {
     expect(logSpy).toHaveBeenCalledWith(error.stack)
   })
 
-  it('should not call LogErrorRepository if server error has not body', async () => {
+  it('should not call LogErrorRepository if server error has empty body', async () => {
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
     vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(null))
+    const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
+
+    await sut.handle(makeHttpRequest())
+
+    expect(logSpy).not.toHaveBeenCalled()
+  })
+
+  it('should not call LogErrorRepository if error has empty stack', async () => {
+    const error = makeError()
+    error.stack = ''
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(error))
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
     await sut.handle(makeHttpRequest())
