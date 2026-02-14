@@ -1,6 +1,6 @@
 {
   "name": "gjs-survey-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Backend application for Survey",
   "main": "src/main/index.ts",
   "repository": "https://github.com/gabrielscaranello/survey-api",
