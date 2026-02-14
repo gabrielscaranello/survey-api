@@ -8,7 +8,7 @@ import type {
   HttpRequest,
   HttpResponse,
   SignUpRequest
-} from './signup.protocols.ts'
+} from './signup-controller.protocols.ts'
 
 export class SignupController implements Controller {
   constructor(

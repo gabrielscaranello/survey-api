@@ -2,7 +2,7 @@ import request from 'supertest'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 import { app } from '@/main/config/app'
-import type { SignUpRequest } from '@/presentation/controllers/signup/signup.protocols'
+import type { SignUpRequest } from '@/presentation/controllers'
 import { HTTPStatusCode } from '@/presentation/protocols'
 
 const makeFakeRequestParams = (): SignUpRequest => ({

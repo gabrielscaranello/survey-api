@@ -1,7 +1,7 @@
 import type { AddAccountModel } from '@/domain/usecases'
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
-import { AccountMongoRepository } from './account'
+import { AccountMongoRepository } from './account-mongo.repository'
 
 const makeAddAccountData = (): AddAccountModel => ({
   name: 'any_name',
