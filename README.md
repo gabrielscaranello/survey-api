@@ -33,7 +33,45 @@ yarn install
 cp .env.example .env
 ```
 
+Starting dev server:
+
+```bash
+# Local run, needs to configure mongoDB as define credentials in the .env file
+yarn dev
+
+# Run as docker containe, provided by docker-compose
+yarn docker:up
+```
+
 A node server will be started on [http://localhost:3000](http://localhost:3000).
+
+## 🛠️ Build
+
+The build process will generate a production-ready bundle of your application.
+
+> [!NOTE]  
+> Needs to configure environment variables to run
+
+1. Run build:
+
+```bash
+yarn build
+```
+
+2. Run the built application:
+
+```bash
+yarn start
+```
+
+### Docker build
+
+> [!WARNING]
+> Docker build do not include NGINX, PM2 or any other service, only the node application.
+
+```bash
+make build
+```
 
 ## 🧪 Unit Tests
 
@@ -60,6 +98,5 @@ yarn test:debug
 ```
 
 > [!TIP]  
-> Any test script can be run with file filtering, for example:
-> `yarn test src/domain` or  
-> `yarn test src/domain/product/product.spec.ts`
+> Any test script can be run with file filtering, for example:  
+> `yarn test src/domain` or `yarn test src/domain/product/product.spec.ts`
