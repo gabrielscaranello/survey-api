@@ -2,7 +2,15 @@ import request from 'supertest'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 import { app } from '@/main/config/app'
+import type { SignUpRequest } from '@/presentation/controllers/signup/signup.protocols'
 import { HTTPStatusCode } from '@/presentation/protocols'
+
+const makeFakeRequestParams = (): SignUpRequest => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password',
+  passwordConfirmation: 'any_password'
+})
 
 describe('Signup Routes', () => {
   beforeAll(async () => {
@@ -23,12 +31,7 @@ describe('Signup Routes', () => {
   it('should return an account on success', async () => {
     await request(app)
       .post(uri)
-      .send({
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password'
-      })
+      .send(makeFakeRequestParams())
       .expect(HTTPStatusCode.OK)
   })
 })

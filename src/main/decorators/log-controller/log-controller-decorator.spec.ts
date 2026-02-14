@@ -8,22 +8,22 @@ import type {
 
 import { LogControllerDecorator } from './log-controller.decorator'
 
-const makeHttpRequest = (): HttpRequest => ({
+const makeFakeRequest = (): HttpRequest => ({
   body: { foo: 'bar' }
 })
 
-const makeHttpResponse = (): HttpResponse => ok({ foo: 'bar' })
+const makeFakeResponse = (): HttpResponse => ok({ foo: 'bar' })
 
-const makeError = (): Error => {
+const makeError = (stack = 'any_stack'): Error => {
   const error = new Error()
-  error.stack = 'any_stack'
+  error.stack = stack
   return error
 }
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle(_: HttpRequest): Promise<HttpResponse> {
-      return await Promise.resolve(makeHttpResponse())
+      return await Promise.resolve(makeFakeResponse())
     }
   }
 
@@ -56,7 +56,7 @@ const makeSut = (): SutTypes => {
 
 describe('Log Controller Decorator', () => {
   it('should call controller handle', async () => {
-    const httpRequest = makeHttpRequest()
+    const httpRequest = makeFakeRequest()
     const { sut, controllerStub } = makeSut()
     const handleSpy = vi.spyOn(controllerStub, 'handle')
 
@@ -66,12 +66,11 @@ describe('Log Controller Decorator', () => {
   })
 
   it('should return the same result of the controller', async () => {
-    const httpRequest = makeHttpRequest()
     const { sut } = makeSut()
 
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.handle(makeFakeRequest())
 
-    expect(httpResponse).toEqual(makeHttpResponse())
+    expect(httpResponse).toEqual(makeFakeResponse())
   })
 
   it('should call LogErrorRepository with correct error if controller returns a server error', async () => {
@@ -80,7 +79,7 @@ describe('Log Controller Decorator', () => {
     vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(error))
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
-    await sut.handle(makeHttpRequest())
+    await sut.handle(makeFakeRequest())
 
     expect(logSpy).toHaveBeenCalledWith(error.stack)
   })
@@ -90,29 +89,28 @@ describe('Log Controller Decorator', () => {
     vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(null))
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
-    await sut.handle(makeHttpRequest())
+    await sut.handle(makeFakeRequest())
 
     expect(logSpy).not.toHaveBeenCalled()
   })
 
   it('should not call LogErrorRepository if error has empty stack', async () => {
-    const error = makeError()
-    error.stack = ''
+    const error = serverError(makeError(''))
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
-    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(error))
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(error)
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
-    await sut.handle(makeHttpRequest())
+    await sut.handle(makeFakeRequest())
 
     expect(logSpy).not.toHaveBeenCalled()
   })
 
   it('should not call LogErrorRepository if controller does not return a server error', async () => {
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
-    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(makeHttpResponse())
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(makeFakeResponse())
     const logSpy = vi.spyOn(logErrorRepositoryStub, 'logError')
 
-    await sut.handle(makeHttpRequest())
+    await sut.handle(makeFakeRequest())
 
     expect(logSpy).not.toHaveBeenCalled()
   })

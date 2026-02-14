@@ -1,11 +1,15 @@
+import type { AddAccountModel } from '@/domain/usecases'
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
 import { AccountMongoRepository } from './account'
 
-const makeSut = (): AccountMongoRepository => {
-  const sut = new AccountMongoRepository()
-  return sut
-}
+const makeAddAccountData = (): AddAccountModel => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password'
+})
+
+const makeSut = (): AccountMongoRepository => new AccountMongoRepository()
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
@@ -22,19 +26,16 @@ describe('Account Mongo Repository', () => {
   })
 
   it('should return an account on success', async () => {
+    const data = makeAddAccountData()
     const sut = makeSut()
 
-    const account = await sut.add({
-      name: 'valid_name',
-      email: 'valid_email',
-      password: 'valid_password'
-    })
+    const account = await sut.add(data)
 
     expect(account).toBeTruthy()
     expect(account).not.toHaveProperty('_id')
     expect(account.id).toBeTruthy()
-    expect(account.name).toBe('valid_name')
-    expect(account.email).toBe('valid_email')
-    expect(account.password).toBe('valid_password')
+    expect(account.name).toBe(data.name)
+    expect(account.email).toBe(data.email)
+    expect(account.password).toBe(data.password)
   })
 })
