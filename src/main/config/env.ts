@@ -5,7 +5,7 @@ export const env = {
     tsNodeDev: get(process.env.TS_NODE_DEV, false)
   },
   db: {
-    mongourl: get(process.env.MONGODB_URL, '')
+    mongourl: get(process.env.MONGO_URL, '')
   }
 }
 

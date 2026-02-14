@@ -1,0 +1,50 @@
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    command: sh -c "yarn dev"
+    container_name: servey-api
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}'
+      - 9229:9229
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./src:/usr/src/app/src
+    networks:
+      - survey-api
+
+  mongodb:
+    image: mongo:7.0.30
+    container_name: mongodb
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD}'
+      MONGO_INITDB_DATABASE: '${MONGO_DATABASE}'
+    ports:
+      - '${MONGO_PORT:-27017}:27017'
+    volumes:
+      - mongodb:/data/db
+    networks:
+      - survey-api
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mongodb:
+
+networks:
+  survey-api:
+    driver: bridge
