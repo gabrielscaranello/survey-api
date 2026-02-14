@@ -12,7 +12,7 @@
     "dev": "ts-node-dev --inspect -T --quiet --watch src --respawn src/main/server.ts",
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "typecheck": "tsc",
+    "typecheck": "echo \"Running typecheck...\" && tsc",
     "format": "prettier --write \"**/*.{ts,md,json}\" --ignore-path .gitignore",
     "lint": "eslint --ext .ts .",
     "docker:up": "make up",
