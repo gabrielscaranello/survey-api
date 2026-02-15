@@ -1,2 +1,2 @@
-yarn typecheck
 yarn test:ci
+yarn typecheck
