@@ -1,4 +1,6 @@
-POST http://localhost:{{PORT}}/api/signup
+### SignUp - Create new account
+
+POST http://localhost:{{PORT}}/api/signup HTTP/1.1
 Content-Type: application/json
 
 {
