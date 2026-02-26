@@ -2,11 +2,10 @@ import { DbAddAccount } from '@/data/usecases'
 import { BcryptAdapter } from '@/infra/criptography'
 import { AccountMongoRepository, LogMongoRepository } from '@/infra/db/mongodb'
 import { LogControllerDecorator } from '@/main/decorators'
+import { makeSignupValidation } from '@/main/factories'
 import { SignupController } from '@/presentation/controllers'
 import type { Controller } from '@/presentation/protocols'
 import { EmailValidatorAdapter } from '@/utils'
-
-import { makeSignupValidation } from './signup-validation.factory'
 
 export const makeSignUp = (): Controller => {
   const salt = 12

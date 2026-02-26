@@ -1,3 +1,4 @@
+import { makeSignupValidation } from '@/main/factories'
 import type { SignUpRequest } from '@/presentation/controllers'
 import {
   CompareFieldValidation,
@@ -6,15 +7,13 @@ import {
   type Validation
 } from '@/presentation/helpers/validators'
 
-import { makeSignupValidation } from './signup-validation.factory'
-
 vi.mock('@/presentation/helpers/validators', async () => ({
   ...(await vi.importActual('@/presentation/helpers/validators')),
   ValidationComposite: vi.fn()
 }))
 
 describe('Signup Validation Factory', () => {
-  it('Should make ValidationComposite with all validations', () => {
+  it('should make ValidationComposite with all validations', () => {
     const validations: Validation[] = []
     const requiredFields: Array<keyof SignUpRequest> = [
       'name',
