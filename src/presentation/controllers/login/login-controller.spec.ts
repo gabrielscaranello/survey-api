@@ -1,5 +1,10 @@
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError, unauthorized } from '@/presentation/helpers'
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized
+} from '@/presentation/helpers'
 
 import type {
   Authentication,
@@ -131,5 +136,13 @@ describe('Login Controller', () => {
     const result = await sut.handle(makeFakeRequest())
 
     expect(result).toEqual(serverError(new Error()))
+  })
+
+  it('should return 200 if Authentication succeeds', async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.handle(makeFakeRequest())
+
+    expect(result).toEqual(ok({ accessToken: makeFakeToken() }))
   })
 })
