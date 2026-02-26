@@ -31,4 +31,14 @@ describe('Login Controller', () => {
 
     expect(result).toEqual(badRequest(new MissingParamError('email')))
   })
+
+  it('should return 400 if no password is provided', async () => {
+    const request = makeFakeRequest()
+    request.body.password = ''
+    const { sut } = makeSut()
+
+    const result = await sut.handle(request)
+
+    expect(result).toEqual(badRequest(new MissingParamError('password')))
+  })
 })
