@@ -8,7 +8,7 @@ import type {
   EmailValidator,
   HttpRequest,
   SignUpRequest
-} from './signup-controller.protocols.ts'
+} from './signup-controller.protocols'
 import { SignupController } from './signup.controller'
 
 interface SutTypes {
