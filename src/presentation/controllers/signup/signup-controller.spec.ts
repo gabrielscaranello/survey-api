@@ -106,18 +106,6 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(badRequest(error))
   })
 
-  it('should return 400 if passwordConfirmation fails', async () => {
-    const { sut } = makeSut()
-    const httpRequest = makeFakeRequest()
-    httpRequest.body.passwordConfirmation = 'wrong_confirmation'
-
-    const httpResponse = await sut.handle(httpRequest)
-
-    expect(httpResponse).toEqual(
-      badRequest(new InvalidParamError('passwordConfirmation'))
-    )
-  })
-
   it('should return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     vi.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)

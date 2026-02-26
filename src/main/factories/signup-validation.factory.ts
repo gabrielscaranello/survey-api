@@ -1,5 +1,6 @@
 import type { SignUpRequest } from '@/presentation/controllers'
 import {
+  CompareFieldValidation,
   RequiredFieldValidation,
   ValidationComposite,
   type Validation
@@ -18,6 +19,10 @@ export const makeSignupValidation = (): Validation => {
   for (const field of requiredFields) {
     validations.push(new RequiredFieldValidation(field))
   }
+
+  validations.push(
+    new CompareFieldValidation('passwordConfirmation', 'password')
+  )
 
   return new ValidationComposite(validations)
 }

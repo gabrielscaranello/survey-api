@@ -23,13 +23,13 @@ const makeSut = (): SutTypes => {
 
 describe('RequiredFieldValidation', () => {
   it('should return a InvalidParamError if field is missing', () => {
-    const { sut, fieldToCompareName } = makeSut()
+    const { sut, fieldName, fieldToCompareName } = makeSut()
     const input = makeFakeInput()
     input[fieldToCompareName] = 'other_value'
 
     const error = sut.validate(input)
 
-    expect(error).toEqual(new InvalidParamError(fieldToCompareName))
+    expect(error).toEqual(new InvalidParamError(fieldName))
   })
 
   it('should return null validation success', () => {
