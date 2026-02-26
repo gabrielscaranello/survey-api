@@ -6,6 +6,8 @@ import { SignupController } from '@/presentation/controllers'
 import type { Controller } from '@/presentation/protocols'
 import { EmailValidatorAdapter } from '@/utils'
 
+import { makeSignupValidation } from './signup-validation.factory'
+
 export const makeSignUp = (): Controller => {
   const salt = 12
   const hasher = new BcryptAdapter(salt)
@@ -16,7 +18,8 @@ export const makeSignUp = (): Controller => {
 
   const signupController = new SignupController(
     emailValidator,
-    accountRepository
+    accountRepository,
+    makeSignupValidation()
   )
   const logErrorRepository = new LogMongoRepository()
   return new LogControllerDecorator(signupController, logErrorRepository)

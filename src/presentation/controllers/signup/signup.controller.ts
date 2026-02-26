@@ -15,12 +15,12 @@ export class SignupController implements Controller {
   constructor(
     private readonly emailValidator: EmailValidator,
     private readonly addAccount: AddAccount,
-    private readonly validation?: Validation
+    private readonly validation: Validation
   ) {}
 
   async handle(httpRequest: HttpRequest<SignUpRequest>): Promise<HttpResponse> {
     try {
-      const validationError = this.validation?.validate(httpRequest.body)
+      const validationError = this.validation.validate(httpRequest.body)
       if (validationError) {
         return badRequest(validationError)
       }
