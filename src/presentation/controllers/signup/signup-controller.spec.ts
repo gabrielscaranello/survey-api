@@ -7,15 +7,10 @@ import type {
   AddAccountModel,
   EmailValidator,
   HttpRequest,
-  SignUpRequest
+  SignUpRequest,
+  Validation
 } from './signup-controller.protocols'
 import { SignupController } from './signup.controller'
-
-interface SutTypes {
-  sut: SignupController
-  emailValidatorStub: EmailValidator
-  addAccountStub: AddAccount
-}
 
 const makeError = (): Error => {
   const error = new Error()
@@ -59,15 +54,48 @@ const makeAddAccount = (): AddAccount => {
   return new AddAccountStub()
 }
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(_input: any): Error | null {
+      return null
+    }
+  }
+
+  return new ValidationStub()
+}
+
+interface SutTypes {
+  sut: SignupController
+  emailValidatorStub: EmailValidator
+  addAccountStub: AddAccount
+  validationStub: Validation
+}
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
   const addAccountStub = makeAddAccount()
-  const sut = new SignupController(emailValidatorStub, addAccountStub)
+  const validationStub = makeValidation()
 
-  return { sut, emailValidatorStub, addAccountStub }
+  const sut = new SignupController(
+    emailValidatorStub,
+    addAccountStub,
+    validationStub
+  )
+
+  return { sut, emailValidatorStub, addAccountStub, validationStub }
 }
 
 describe('SignUp Controller', () => {
+  it('should call Validation with correct values', async () => {
+    const request = makeFakeRequest()
+    const { sut, validationStub } = makeSut()
+    const validateSpy = vi.spyOn(validationStub, 'validate')
+
+    await sut.handle(request)
+
+    expect(validateSpy).toHaveBeenCalledWith(request.body)
+  })
+
   it('should return 400 if no name is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
