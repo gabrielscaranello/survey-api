@@ -1,5 +1,5 @@
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
-import { badRequest } from '@/presentation/helpers'
+import { badRequest, serverError } from '@/presentation/helpers'
 
 import type {
   EmailValidator,
@@ -75,5 +75,17 @@ describe('Login Controller', () => {
     await sut.handle(request)
 
     expect(isValidEmailSpy).toHaveBeenCalledWith(request.body.email)
+  })
+
+  it('should return 500 if emailValidator throws', async () => {
+    const request = makeFakeRequest()
+    const { sut, emailValidatorStub } = makeSut()
+    vi.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const result = await sut.handle(request)
+
+    expect(result).toEqual(serverError(new Error()))
   })
 })
