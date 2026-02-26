@@ -1,4 +1,4 @@
-import { MissingParamError } from '@/presentation/errors'
+import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { badRequest } from '@/presentation/helpers'
 import type { HttpRequest } from '@/presentation/protocols'
 import type { EmailValidator } from '@/presentation/protocols/email-validator'
@@ -43,6 +43,16 @@ describe('Login Controller', () => {
     const result = await sut.handle(request)
 
     expect(result).toEqual(badRequest(new MissingParamError('email')))
+  })
+
+  it('should return 400 if invalid email is provided', async () => {
+    const request = makeFakeRequest()
+    const { sut, emailValidatorStub } = makeSut()
+    vi.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const result = await sut.handle(request)
+
+    expect(result).toEqual(badRequest(new InvalidParamError('email')))
   })
 
   it('should return 400 if no password is provided', async () => {
