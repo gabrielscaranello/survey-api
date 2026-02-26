@@ -2,6 +2,8 @@ import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers'
 
 import type {
+  Authentication,
+  AuthenticationParams,
   EmailValidator,
   HttpRequest,
   LoginRequest
@@ -15,10 +17,7 @@ const makeFakeRequest = (): HttpRequest<LoginRequest> => ({
   }
 })
 
-interface SutTypes {
-  sut: LoginController
-  emailValidatorStub: EmailValidator
-}
+const makeFakeToken = (): string => 'any_token'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -30,10 +29,28 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth(_: AuthenticationParams): Promise<string> {
+      return await Promise.resolve(makeFakeToken())
+    }
+  }
+
+  return new AuthenticationStub()
+}
+
+interface SutTypes {
+  sut: LoginController
+  emailValidatorStub: EmailValidator
+  authenticationStub: Authentication
+}
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
-  const sut = new LoginController(emailValidatorStub)
-  return { sut, emailValidatorStub }
+  const authenticationStub = makeAuthentication()
+  const sut = new LoginController(emailValidatorStub, authenticationStub)
+
+  return { sut, emailValidatorStub, authenticationStub }
 }
 
 describe('Login Controller', () => {
@@ -78,14 +95,23 @@ describe('Login Controller', () => {
   })
 
   it('should return 500 if emailValidator throws', async () => {
-    const request = makeFakeRequest()
     const { sut, emailValidatorStub } = makeSut()
     vi.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
 
-    const result = await sut.handle(request)
+    const result = await sut.handle(makeFakeRequest())
 
     expect(result).toEqual(serverError(new Error()))
+  })
+
+  it('should call Authentication with correct values', async () => {
+    const request = makeFakeRequest()
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = vi.spyOn(authenticationStub, 'auth')
+
+    await sut.handle(request)
+
+    expect(authSpy).toHaveBeenCalledWith(request.body)
   })
 })
