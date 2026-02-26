@@ -114,4 +114,13 @@ describe('Login Controller', () => {
 
     expect(authSpy).toHaveBeenCalledWith(request.body)
   })
+
+  it('should return 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    vi.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(new Error())
+
+    const result = await sut.handle(makeFakeRequest())
+
+    expect(result).toEqual(serverError(new Error()))
+  })
 })
