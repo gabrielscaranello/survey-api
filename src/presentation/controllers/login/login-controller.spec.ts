@@ -1,5 +1,5 @@
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers'
+import { badRequest, serverError, unauthorized } from '@/presentation/helpers'
 
 import type {
   Authentication,
@@ -113,6 +113,15 @@ describe('Login Controller', () => {
     await sut.handle(request)
 
     expect(authSpy).toHaveBeenCalledWith(request.body)
+  })
+
+  it('should return 401 if Authentication returns null', async () => {
+    const { sut, authenticationStub } = makeSut()
+    vi.spyOn(authenticationStub, 'auth').mockResolvedValueOnce(null)
+
+    const result = await sut.handle(makeFakeRequest())
+
+    expect(result).toEqual(unauthorized())
   })
 
   it('should return 500 if Authentication throws', async () => {
