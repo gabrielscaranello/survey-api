@@ -1,4 +1,5 @@
 export * from './compare-field'
+export * from './email'
 export * from './required-field'
 export * from './validation-composite'
 export type * from './validation'
