@@ -2,10 +2,12 @@ import { makeSignupValidation } from '@/main/factories'
 import type { SignUpRequest } from '@/presentation/controllers'
 import {
   CompareFieldValidation,
+  EmailValidation,
   RequiredFieldValidation,
   ValidationComposite,
   type Validation
 } from '@/presentation/helpers/validators'
+import { EmailValidatorAdapter } from '@/utils'
 
 vi.mock('@/presentation/helpers/validators', async () => ({
   ...(await vi.importActual('@/presentation/helpers/validators')),
@@ -27,7 +29,8 @@ describe('Signup Validation Factory', () => {
     }
 
     validations.push(
-      new CompareFieldValidation('passwordConfirmation', 'password')
+      new CompareFieldValidation('passwordConfirmation', 'password'),
+      new EmailValidation('email', new EmailValidatorAdapter())
     )
 
     makeSignupValidation()
