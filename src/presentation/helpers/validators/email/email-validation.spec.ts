@@ -42,6 +42,18 @@ describe('EmailValidation', () => {
     expect(isValidSpy).toHaveBeenCalledWith(input[fieldName])
   })
 
+  it('should EmailValidation throw with EmailValidator throws', () => {
+    const input = makeFakeInput()
+    const { sut, emailValidatorStub } = makeSut()
+    vi.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const handle = (): Error | null => sut.validate(input)
+
+    expect(handle).toThrow()
+  })
+
   it('should return a InvalidParamError if field is missing', () => {
     const { sut, fieldName, emailValidatorStub } = makeSut()
     vi.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
