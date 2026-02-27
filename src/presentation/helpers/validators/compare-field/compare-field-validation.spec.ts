@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
   return { sut, fieldName, fieldToCompareName }
 }
 
-describe('RequiredFieldValidation', () => {
+describe('CompareFieldValidation', () => {
   it('should return a InvalidParamError if field is missing', () => {
     const { sut, fieldName, fieldToCompareName } = makeSut()
     const input = makeFakeInput()
