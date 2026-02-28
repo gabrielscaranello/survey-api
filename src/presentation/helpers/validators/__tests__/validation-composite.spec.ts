@@ -20,22 +20,22 @@ const makeValidation = (): Validation => {
 
 interface SutTypes {
   sut: ValidationComposite
-  validations: Validation[]
+  validationStubs: Validation[]
 }
 
 const makeSut = (): SutTypes => {
-  const validations = [makeValidation(), makeValidation()]
-  const sut = new ValidationComposite(validations)
+  const validationStubs = [makeValidation(), makeValidation()]
+  const sut = new ValidationComposite(validationStubs)
 
-  return { sut, validations }
+  return { sut, validationStubs }
 }
 
 describe('ValidationComposite', () => {
   it('should call validates with correct values', () => {
     const input = makeFakeInput()
-    const { sut, validations } = makeSut()
-    const validate1Spy = vi.spyOn(validations[0], 'validate')
-    const validate2Spy = vi.spyOn(validations[1], 'validate')
+    const { sut, validationStubs } = makeSut()
+    const validate1Spy = vi.spyOn(validationStubs[0], 'validate')
+    const validate2Spy = vi.spyOn(validationStubs[1], 'validate')
 
     sut.validate(input)
 
@@ -44,9 +44,9 @@ describe('ValidationComposite', () => {
   })
 
   it('should return an error if any validation fails', () => {
-    const { sut, validations } = makeSut()
+    const { sut, validationStubs } = makeSut()
     const error = new Error()
-    vi.spyOn(validations[0], 'validate').mockReturnValueOnce(error)
+    vi.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(error)
 
     const result = sut.validate(makeFakeInput())
 
@@ -54,16 +54,21 @@ describe('ValidationComposite', () => {
   })
 
   it('should stop validations if one fails', () => {
-    const { sut, validations } = makeSut()
+    const { sut, validationStubs } = makeSut()
+    const firstError = new Error('first_error')
+    const secondError = new Error('second_error')
     const validate1Spy = vi
-      .spyOn(validations[0], 'validate')
-      .mockReturnValueOnce(new Error())
-    const validate2Spy = vi.spyOn(validations[1], 'validate')
+      .spyOn(validationStubs[0], 'validate')
+      .mockReturnValueOnce(firstError)
+    const validate2Spy = vi
+      .spyOn(validationStubs[1], 'validate')
+      .mockReturnValueOnce(secondError)
 
-    sut.validate(makeFakeInput())
+    const result = sut.validate(makeFakeInput())
 
     expect(validate1Spy).toHaveBeenCalled()
     expect(validate2Spy).not.toHaveBeenCalled()
+    expect(result).toBe(firstError)
   })
 
   it('should return null if all validations pass', () => {
