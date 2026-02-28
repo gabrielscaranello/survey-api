@@ -4,9 +4,9 @@ import {
   CompareFieldValidation,
   EmailValidation,
   RequiredFieldValidation,
-  ValidationComposite,
-  type Validation
+  ValidationComposite
 } from '@/presentation/helpers/validators'
+import type { Validation } from '@/presentation/protocols'
 import { EmailValidatorAdapter } from '@/utils'
 
 vi.mock('@/presentation/helpers/validators', async () => ({
