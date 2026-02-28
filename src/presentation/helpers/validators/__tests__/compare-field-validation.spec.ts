@@ -1,6 +1,5 @@
 import { InvalidParamError } from '@/presentation/errors'
-
-import { CompareFieldValidation } from './compare-field.validation'
+import { CompareFieldValidation } from '@/presentation/helpers/validators'
 
 const makeFakeInput = (): Record<string, string> => ({
   any_field: 'any_value',

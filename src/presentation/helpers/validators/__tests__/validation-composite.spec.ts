@@ -1,6 +1,7 @@
-import type { Validation } from '@/presentation/helpers/validators'
-
-import { ValidationComposite } from './validation-composite'
+import {
+  ValidationComposite,
+  type Validation
+} from '@/presentation/helpers/validators'
 
 const makeFakeInput = (): Record<string, string> => ({
   any_prop: 'any_value',

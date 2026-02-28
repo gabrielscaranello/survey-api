@@ -1,6 +1,5 @@
 import { MissingParamError } from '@/presentation/errors'
-
-import { RequiredFieldValidation } from './required-field.validation'
+import { RequiredFieldValidation } from '@/presentation/helpers/validators'
 
 const makeFakeInput = (): Record<string, string> => ({
   any_field: 'any_value',
