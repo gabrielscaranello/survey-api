@@ -1,4 +1,3 @@
-import { InvalidParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError } from '@/presentation/helpers'
 
 import type {
@@ -80,7 +79,7 @@ describe('SignUp Controller', () => {
   })
 
   it('should return 400 if Validation returns an error', async () => {
-    const error = new InvalidParamError('any_field')
+    const error = new Error('any_error')
     const { sut, validationStub } = makeSut()
     vi.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
 
