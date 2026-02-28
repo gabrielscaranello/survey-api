@@ -1,4 +1,4 @@
-import { badRequest, ok, serverError } from '@/presentation/helpers'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http'
 
 import type {
   AccountModel,

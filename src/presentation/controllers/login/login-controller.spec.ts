@@ -3,7 +3,7 @@ import {
   ok,
   serverError,
   unauthorized
-} from '@/presentation/helpers'
+} from '@/presentation/helpers/http'
 
 import type {
   Authentication,

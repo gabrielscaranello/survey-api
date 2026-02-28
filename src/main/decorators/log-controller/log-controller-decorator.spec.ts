@@ -1,5 +1,5 @@
 import type { LogErrorRepository } from '@/data/protocols'
-import { ok, serverError } from '@/presentation/helpers'
+import { ok, serverError } from '@/presentation/helpers/http'
 import type {
   Controller,
   HttpRequest,
