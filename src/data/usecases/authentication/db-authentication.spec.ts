@@ -181,4 +181,16 @@ describe('DbAuthentication', () => {
 
     expect(updateSpy).toHaveBeenCalledWith(account.id, 'any_token')
   })
+
+  it('should throw if UpdateAccessTokenRepository throws', async () => {
+    const { sut, updateAccessTokenRepository } = makeSut()
+    vi.spyOn(
+      updateAccessTokenRepository,
+      'updateAccessToken'
+    ).mockRejectedValueOnce(new Error())
+
+    const promise = sut.auth(makeFakeAuthentication())
+
+    await expect(promise).rejects.toThrow()
+  })
 })
