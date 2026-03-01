@@ -107,4 +107,13 @@ describe('DbAuthentication', () => {
 
     expect(account).toBeNull()
   })
+
+  it('should throw if hashComparer throws', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    vi.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(new Error())
+
+    const promise = sut.auth(makeFakeAuthentication())
+
+    await expect(promise).rejects.toThrow()
+  })
 })
