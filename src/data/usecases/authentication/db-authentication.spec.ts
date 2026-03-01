@@ -1,4 +1,7 @@
-import type { LoadAccountByEmailRepository } from '@/data/protocols'
+import type {
+  HashComparer,
+  LoadAccountByEmailRepository
+} from '@/data/protocols'
 import type { AccountModel } from '@/domain/models'
 import type { AuthenticationParams } from '@/domain/usecases'
 
@@ -9,25 +12,49 @@ const makeFakeAuthentication = (): AuthenticationParams => ({
   password: 'any_password'
 })
 
+const makeFakeAccount = (): AccountModel => ({
+  id: 'any_id',
+  name: 'any_name',
+  email: 'any_mail@mail.com',
+  password: 'hashed_password'
+})
+
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
     async loadByEmail(_: string): Promise<AccountModel | null> {
-      return await Promise.resolve(null)
+      return await Promise.resolve(makeFakeAccount())
     }
   }
+
   return new LoadAccountByEmailRepositoryStub()
+}
+
+const makeHashComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async compare(_: string, __: string): Promise<boolean> {
+      return await Promise.resolve(true)
+    }
+  }
+
+  return new HashComparerStub()
 }
 
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  hashComparerStub: HashComparer
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+  const hashComparerStub = makeHashComparer()
 
-  return { sut, loadAccountByEmailRepositoryStub }
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub
+  )
+
+  return { sut, loadAccountByEmailRepositoryStub, hashComparerStub }
 }
 
 describe('DbAuthentication', () => {
@@ -47,5 +74,16 @@ describe('DbAuthentication', () => {
     const account = await sut.auth(makeFakeAuthentication())
 
     expect(account).toBeNull()
+  })
+
+  it('should call hashComparer with correct values', async () => {
+    const data = makeFakeAuthentication()
+    const account = makeFakeAccount()
+    const { sut, hashComparerStub } = makeSut()
+    const hashSpy = vi.spyOn(hashComparerStub, 'compare')
+
+    await sut.auth(data)
+
+    expect(hashSpy).toHaveBeenCalledWith(data.password, account.password)
   })
 })
