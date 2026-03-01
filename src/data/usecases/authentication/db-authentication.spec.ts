@@ -98,4 +98,13 @@ describe('DbAuthentication', () => {
 
     expect(hashSpy).toHaveBeenCalledWith(data.password, account.password)
   })
+
+  it('should return null if hashComparer returns false', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    vi.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false)
+
+    const account = await sut.auth(makeFakeAuthentication())
+
+    expect(account).toBeNull()
+  })
 })
