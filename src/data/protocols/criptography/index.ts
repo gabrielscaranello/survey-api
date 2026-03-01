@@ -1,3 +1,3 @@
-export type * from './hasher'
+export type * from './encrypter'
 export type * from './hash-comparer'
-export type * from './token-generator'
+export type * from './hasher'
