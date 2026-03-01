@@ -1,7 +1,8 @@
 import type {
   HashComparer,
   LoadAccountByEmailRepository,
-  TokenGenerator
+  TokenGenerator,
+  UpdateAccessTokenRepository
 } from '@/data/protocols'
 import type { Authentication, AuthenticationParams } from '@/domain/usecases'
 
@@ -9,7 +10,8 @@ export class DbAuthentication implements Authentication {
   constructor(
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly tokenGenerator: TokenGenerator
+    private readonly tokenGenerator: TokenGenerator,
+    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
 
   async auth(params: AuthenticationParams): Promise<string | null> {
@@ -19,7 +21,14 @@ export class DbAuthentication implements Authentication {
     if (!account) return null
 
     await this.hashComparer.compare(password, account.password)
-    await this.tokenGenerator.generateToken(account.id)
+
+    const accessToken = await this.tokenGenerator.generateToken(account.id)
+
+    await this.updateAccessTokenRepository.updateAccessToken(
+      account.id,
+      accessToken
+    )
+
     return null
   }
 }
