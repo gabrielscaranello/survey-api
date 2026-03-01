@@ -1,7 +1,8 @@
 import type {
   HashComparer,
   LoadAccountByEmailRepository,
-  TokenGenerator
+  TokenGenerator,
+  UpdateAccessTokenRepository
 } from '@/data/protocols'
 import type { AccountModel } from '@/domain/models'
 import type { AuthenticationParams } from '@/domain/usecases'
@@ -32,7 +33,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 
 const makeHashComparer = (): HashComparer => {
   class HashComparerStub implements HashComparer {
-    async compare(_: string, __: string): Promise<boolean> {
+    async compare(_: string): Promise<boolean> {
       return await Promise.resolve(true)
     }
   }
@@ -50,29 +51,43 @@ const makeTokenGenerator = (): TokenGenerator => {
   return new TokenGeneratorStub()
 }
 
+const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
+  class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
+    async updateAccessToken(_: string): Promise<void> {
+      await Promise.resolve()
+    }
+  }
+
+  return new UpdateAccessTokenRepositoryStub()
+}
+
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
   tokenGeneratorStub: TokenGenerator
+  updateAccessTokenRepository: UpdateAccessTokenRepository
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
   const hashComparerStub = makeHashComparer()
   const tokenGeneratorStub = makeTokenGenerator()
+  const updateAccessTokenRepository = makeUpdateAccessTokenRepository()
 
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
-    tokenGeneratorStub
+    tokenGeneratorStub,
+    updateAccessTokenRepository
   )
 
   return {
     sut,
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
-    tokenGeneratorStub
+    tokenGeneratorStub,
+    updateAccessTokenRepository
   }
 }
 
@@ -155,5 +170,15 @@ describe('DbAuthentication', () => {
     const promise = sut.auth(makeFakeAuthentication())
 
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should call UpdateAccessTokenRepository with correct values', async () => {
+    const account = makeFakeAccount()
+    const { sut, updateAccessTokenRepository } = makeSut()
+    const updateSpy = vi.spyOn(updateAccessTokenRepository, 'updateAccessToken')
+
+    await sut.auth(makeFakeAuthentication())
+
+    expect(updateSpy).toHaveBeenCalledWith(account.id, 'any_token')
   })
 })
