@@ -103,7 +103,11 @@ describe('DbAuthentication', () => {
   })
 
   it('should return null if loadAccountByEmailRepository returns null', async () => {
-    const { sut } = makeSut()
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    vi.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    ).mockResolvedValueOnce(null)
 
     const account = await sut.auth(makeFakeAuthentication())
 
@@ -192,5 +196,13 @@ describe('DbAuthentication', () => {
     const promise = sut.auth(makeFakeAuthentication())
 
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should return an accessToken on success', async () => {
+    const { sut } = makeSut()
+
+    const accessToken = await sut.auth(makeFakeAuthentication())
+
+    expect(accessToken).toBe('any_token')
   })
 })
