@@ -40,4 +40,12 @@ describe('DbAuthentication', () => {
 
     expect(loadSpy).toHaveBeenCalledWith(data.email)
   })
+
+  it('should return null if loadAccountByEmailRepository returns null', async () => {
+    const { sut } = makeSut()
+
+    const account = await sut.auth(makeFakeAuthentication())
+
+    expect(account).toBeNull()
+  })
 })
