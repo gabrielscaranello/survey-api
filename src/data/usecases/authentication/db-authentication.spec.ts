@@ -145,4 +145,15 @@ describe('DbAuthentication', () => {
 
     expect(tokenSpy).toHaveBeenCalledWith(account.id)
   })
+
+  it('should throw if TokenGenerator throws', async () => {
+    const { sut, tokenGeneratorStub } = makeSut()
+    vi.spyOn(tokenGeneratorStub, 'generateToken').mockRejectedValueOnce(
+      new Error()
+    )
+
+    const promise = sut.auth(makeFakeAuthentication())
+
+    await expect(promise).rejects.toThrow()
+  })
 })
