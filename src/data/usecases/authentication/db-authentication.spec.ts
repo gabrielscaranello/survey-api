@@ -76,6 +76,18 @@ describe('DbAuthentication', () => {
     expect(account).toBeNull()
   })
 
+  it('should throw if loadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    vi.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    ).mockRejectedValueOnce(new Error())
+
+    const promise = sut.auth(makeFakeAuthentication())
+
+    await expect(promise).rejects.toThrow()
+  })
+
   it('should call hashComparer with correct values', async () => {
     const data = makeFakeAuthentication()
     const account = makeFakeAccount()
