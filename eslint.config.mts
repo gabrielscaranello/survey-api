@@ -28,7 +28,8 @@ export default defineConfig([
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
-      '@typescript-eslint/no-magic-numbers': 'off'
+      '@typescript-eslint/no-magic-numbers': 'off',
+      '@typescript-eslint/init-declarations': 'off'
     }
   }
 ])

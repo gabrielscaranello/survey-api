@@ -1,3 +1,5 @@
+import type { Collection } from 'mongodb'
+
 import type { AddAccountModel } from '@/domain/usecases'
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
@@ -12,6 +14,8 @@ const makeAddAccountData = (): AddAccountModel => ({
 const makeSut = (): AccountMongoRepository => new AccountMongoRepository()
 
 describe('Account Mongo Repository', () => {
+  let accountCollection: Collection
+
   beforeAll(async () => {
     await MongoHelper.connect(globalThis.__MONGO_URI__)
   })
@@ -21,11 +25,11 @@ describe('Account Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = MongoHelper.getCollection('accounts')
+    accountCollection = MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
-  it('should return an account on success', async () => {
+  it('should return an account on save success', async () => {
     const data = makeAddAccountData()
     const sut = makeSut()
 
@@ -37,5 +41,12 @@ describe('Account Mongo Repository', () => {
     expect(account.name).toBe(data.name)
     expect(account.email).toBe(data.email)
     expect(account.password).toBe(data.password)
+  })
+
+  it('should return null if LoadAccountByEmailRepository returns null', async () => {
+    const sut = makeSut()
+    const account = await sut.loadByEmail('any_email@mail.com')
+
+    expect(account).toBeNull()
   })
 })
