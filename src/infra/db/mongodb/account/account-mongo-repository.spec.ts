@@ -49,4 +49,16 @@ describe('Account Mongo Repository', () => {
 
     expect(account).toBeNull()
   })
+
+  it('should load an account by email', async () => {
+    const data = makeAddAccountData()
+    const { insertedId } = await accountCollection.insertOne(data)
+    const sut = makeSut()
+
+    const account = await sut.loadByEmail(data.email)
+
+    expect(account).not.toBeNull()
+    expect(account?.email).toBe(data.email)
+    expect(account?.id).toBe(insertedId.toString())
+  })
 })
