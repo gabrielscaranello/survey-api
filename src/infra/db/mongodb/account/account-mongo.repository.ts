@@ -1,3 +1,5 @@
+import type { WithId } from 'mongodb'
+
 import type {
   AddAccountRepository,
   LoadAccountByEmailRepository
@@ -15,7 +17,15 @@ export class AccountMongoRepository
     return { ...data, id: insertedId.toString() }
   }
 
-  async loadByEmail(_: string): Promise<AccountModel | null> {
-    return await Promise.resolve(null)
+  async loadByEmail(email: string): Promise<AccountModel | null> {
+    const accountCollection = MongoHelper.getCollection('accounts')
+    const account = await accountCollection.findOne<WithId<AccountModel>>({
+      email
+    })
+
+    if (!account) return null
+
+    const { _id, ...accountData } = account
+    return { ...accountData, id: _id.toString() }
   }
 }
