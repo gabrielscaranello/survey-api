@@ -18,14 +18,8 @@ export class AccountMongoRepository
   }
 
   async loadByEmail(email: string): Promise<AccountModel | null> {
-    const accountCollection = MongoHelper.getCollection('accounts')
-    const account = await accountCollection.findOne<WithId<AccountModel>>({
-      email
-    })
-
-    if (!account) return null
-
-    const { _id, ...accountData } = account
-    return { ...accountData, id: _id.toString() }
+    const collection = MongoHelper.getCollection('accounts')
+    const account = await collection.findOne<WithId<AccountModel>>({ email })
+    return MongoHelper.mapResult(account)
   }
 }

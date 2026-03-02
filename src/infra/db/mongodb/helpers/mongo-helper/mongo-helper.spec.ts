@@ -108,4 +108,18 @@ describe('Mongo Helper', () => {
       await MongoHelper.disconnect()
     })
   })
+
+  describe('mapResult', () => {
+    it('should return null if no document is provided', () => {
+      const result = MongoHelper.mapResult(null)
+
+      expect(result).toBeNull()
+    })
+
+    it('should return document without _id', () => {
+      const result = MongoHelper.mapResult({ _id: 'any_id', name: 'any_name' })
+
+      expect(result).toEqual({ id: 'any_id', name: 'any_name' })
+    })
+  })
 })

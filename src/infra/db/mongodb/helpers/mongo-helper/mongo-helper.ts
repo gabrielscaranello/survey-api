@@ -1,4 +1,6 @@
-import { MongoClient, type Collection } from 'mongodb'
+import { MongoClient, type Collection, type WithId } from 'mongodb'
+
+import type { MongoMapResult } from './mongo-helper.protocols'
 
 let _client: null | MongoClient = null
 let _connecting = false
@@ -40,5 +42,12 @@ export const MongoHelper = {
       throw new Error('MongoClient not connected')
     }
     return this.client.db().collection(name)
+  },
+
+  mapResult<T>(document: WithId<T> | null): MongoMapResult<T> | null {
+    if (!document) return null
+
+    const { _id, ...data } = document
+    return { ...data, id: _id.toString() }
   }
 }

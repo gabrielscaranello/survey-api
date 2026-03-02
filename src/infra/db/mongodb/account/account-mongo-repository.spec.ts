@@ -58,6 +58,7 @@ describe('Account Mongo Repository', () => {
     const account = await sut.loadByEmail(data.email)
 
     expect(account).not.toBeNull()
+    expect(account).not.toHaveProperty('_id')
     expect(account?.email).toBe(data.email)
     expect(account?.id).toBe(insertedId.toString())
   })
