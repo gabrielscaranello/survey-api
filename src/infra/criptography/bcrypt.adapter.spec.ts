@@ -49,9 +49,19 @@ describe('Bcrypt Adapter', () => {
   describe('compare', () => {
     it('should call bcrypt.compare with correct values', async () => {
       const { sut } = makeSut()
+
       await sut.compare('any_value', 'any_hash')
 
       expect(mockedCompare).toHaveBeenCalledWith('any_value', 'any_hash')
+    })
+
+    it('should return false if bcrypt.compare returns false', async () => {
+      mockedCompare.mockReturnValueOnce(false)
+      const { sut } = makeSut()
+
+      const isValid = await sut.compare('any_value', 'any_hash')
+
+      expect(isValid).toBe(false)
     })
   })
 })
