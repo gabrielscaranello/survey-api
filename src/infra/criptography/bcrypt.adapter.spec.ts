@@ -1,9 +1,11 @@
 import { BcryptAdapter } from './bcrypt.adapter'
 
 const mockedHash = vi.fn().mockReturnValue('hashed_value')
+const mockedCompare = vi.fn().mockReturnValue(true)
 
 vi.mock('bcrypt', () => ({
-  hash: (...args: []): any => mockedHash(...args)
+  hash: (...args: []): any => mockedHash(...args),
+  compare: (...args: []): any => mockedCompare(...args)
 }))
 
 interface SutTypes {
@@ -19,26 +21,37 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Bcrypt Adapter', () => {
-  it('should call bcrypt with correct values', async () => {
-    const { sut, salt } = makeSut()
-    await sut.hash('any_value')
+  describe('hash', () => {
+    it('should call bcrypt with correct values', async () => {
+      const { sut, salt } = makeSut()
+      await sut.hash('any_value')
 
-    expect(mockedHash).toHaveBeenCalledWith('any_value', salt)
+      expect(mockedHash).toHaveBeenCalledWith('any_value', salt)
+    })
+
+    it('should return a hash on success', async () => {
+      const { sut } = makeSut()
+      const hash = await sut.hash('any_value')
+
+      expect(hash).toBe('hashed_value')
+    })
+
+    it('should throw if bcrypt throws', async () => {
+      mockedHash.mockRejectedValueOnce(new Error())
+      const { sut } = makeSut()
+
+      const promise = sut.hash('any_value')
+
+      await expect(promise).rejects.toThrow()
+    })
   })
 
-  it('should return a hash on success', async () => {
-    const { sut } = makeSut()
-    const hash = await sut.hash('any_value')
+  describe('compare', () => {
+    it('should call bcrypt.compare with correct values', async () => {
+      const { sut } = makeSut()
+      await sut.compare('any_value', 'any_hash')
 
-    expect(hash).toBe('hashed_value')
-  })
-
-  it('should throw if bcrypt throws', async () => {
-    mockedHash.mockRejectedValueOnce(new Error())
-    const { sut } = makeSut()
-
-    const promise = sut.hash('any_value')
-
-    await expect(promise).rejects.toThrow()
+      expect(mockedCompare).toHaveBeenCalledWith('any_value', 'any_hash')
+    })
   })
 })
