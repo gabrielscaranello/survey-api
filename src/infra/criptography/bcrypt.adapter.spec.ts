@@ -72,5 +72,14 @@ describe('Bcrypt Adapter', () => {
 
       expect(isValid).toBe(true)
     })
+
+    it('should throw if bcrypt.compare throws', async () => {
+      mockedCompare.mockRejectedValueOnce(new Error())
+      const { sut } = makeSut()
+
+      const promise = sut.compare('any_value', 'any_hash')
+
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
