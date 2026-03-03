@@ -63,5 +63,14 @@ describe('Bcrypt Adapter', () => {
 
       expect(isValid).toBe(false)
     })
+
+    it('should return true if bcrypt.compare returns true', async () => {
+      mockedCompare.mockReturnValueOnce(true)
+      const { sut } = makeSut()
+
+      const isValid = await sut.compare('any_value', 'any_hash')
+
+      expect(isValid).toBe(true)
+    })
   })
 })
