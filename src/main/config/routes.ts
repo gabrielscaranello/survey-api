@@ -1,8 +1,8 @@
 import { Router, type Express } from 'express'
 
-import { signupRoutes } from '@/main/routes'
+import { authRoutes } from '@/main/routes'
 
-const routes = [signupRoutes]
+const routes = [authRoutes]
 
 export const setupRoutes = (app: Express): void => {
   const router = Router()

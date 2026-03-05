@@ -12,7 +12,7 @@ const makeFakeRequestParams = (): SignUpRequest => ({
   passwordConfirmation: 'any_password'
 })
 
-describe('Signup Routes', () => {
+describe('Auth Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(globalThis.__MONGO_URI__)
   })
@@ -26,11 +26,9 @@ describe('Signup Routes', () => {
     await accountCollection.deleteMany({})
   })
 
-  const uri = '/api/signup'
-
   it('should return an account on success', async () => {
     await request(app)
-      .post(uri)
+      .post('/api/auth/signup')
       .send(makeFakeRequestParams())
       .expect(HTTPStatusCode.OK)
   })
