@@ -26,10 +26,12 @@ describe('Auth Routes', () => {
     await accountCollection.deleteMany({})
   })
 
-  it('should return an account on success', async () => {
-    await request(app)
-      .post('/api/auth/signup')
-      .send(makeFakeRequestParams())
-      .expect(HTTPStatusCode.OK)
+  describe('POST /api/auth/signup', () => {
+    it('should return 200 on success', async () => {
+      await request(app)
+        .post('/api/auth/signup')
+        .send(makeFakeRequestParams())
+        .expect(HTTPStatusCode.OK)
+    })
   })
 })
