@@ -9,3 +9,13 @@ Content-Type: application/json
   "password": "any_password",
   "passwordConfirmation": "any_password"
 }
+
+### Login - Login to your account
+
+POST http://localhost:{{PORT}}/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "any_email@mail.com",
+  "password": "any_password"
+}
