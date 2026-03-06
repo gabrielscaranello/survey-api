@@ -11,10 +11,10 @@ export const makeSignUp = (): Controller => {
   const hasher = new BcryptAdapter(salt)
 
   const addAccountRepository = new AccountMongoRepository()
-  const accountRepository = new DbAddAccount(hasher, addAccountRepository)
+  const addAccount = new DbAddAccount(hasher, addAccountRepository)
 
   const signupController = new SignupController(
-    accountRepository,
+    addAccount,
     makeSignupValidation()
   )
   const logErrorRepository = new LogMongoRepository()
