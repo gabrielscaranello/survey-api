@@ -2,7 +2,8 @@
 export const env = {
   app: {
     port: get(process.env.PORT, 3000),
-    tsNodeDev: get(process.env.TS_NODE_DEV, false)
+    tsNodeDev: get(process.env.TS_NODE_DEV, false),
+    jwtSecret: get(process.env.JWT_SECRET, 'secret')
   },
   db: {
     mongourl: get(process.env.MONGO_URL, '')
