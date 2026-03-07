@@ -135,6 +135,15 @@ describe('SignUp Controller', () => {
     expect(authSpy).toHaveBeenCalledWith({ email, password })
   })
 
+  it('should return 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    vi.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(new Error())
+
+    const result = await sut.handle(makeFakeRequest())
+
+    expect(result).toEqual(serverError(new Error()))
+  })
+
   it('should return 200 if account is created', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
