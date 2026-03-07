@@ -16,6 +16,11 @@ export const unauthorized = (): HttpResponse<Error> => ({
   body: new UnauthorizedError()
 })
 
+export const forbidden = (error: Error): HttpResponse<Error> => ({
+  statusCode: HTTPStatusCode.FORBIDDEN,
+  body: error
+})
+
 export const serverError = (error: unknown): HttpResponse<Error> => ({
   statusCode: HTTPStatusCode.SERVER_ERROR,
   body: new ServerError(error instanceof Error ? error.stack : '')

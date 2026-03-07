@@ -1,5 +1,11 @@
+import { EmailInUseError } from '@/domain/errors'
 import type { Authentication } from '@/domain/usecases'
-import { badRequest, ok, serverError } from '@/presentation/helpers/http'
+import {
+  badRequest,
+  forbidden,
+  ok,
+  serverError
+} from '@/presentation/helpers/http'
 
 import type {
   AddAccount,
@@ -30,6 +36,9 @@ export class SignupController implements Controller {
 
       return ok({ accessToken })
     } catch (error) {
+      if (error instanceof EmailInUseError) {
+        return forbidden(error)
+      }
       return serverError(error)
     }
   }
