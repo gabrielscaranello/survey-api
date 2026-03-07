@@ -1,5 +1,11 @@
+import { EmailInUseError } from '@/domain/errors'
 import type { Authentication, AuthenticationParams } from '@/domain/usecases'
-import { badRequest, ok, serverError } from '@/presentation/helpers/http'
+import {
+  badRequest,
+  forbidden,
+  ok,
+  serverError
+} from '@/presentation/helpers/http'
 
 import type {
   AccountModel,
@@ -115,13 +121,23 @@ describe('SignUp Controller', () => {
     expect(addSpy).toHaveBeenCalledWith({ name, email, password })
   })
 
-  it('should return 500 if addAccount throws', async () => {
+  it('should return 403 if email is already used', async () => {
     const { sut, addAccountStub } = makeSut()
     vi.spyOn(addAccountStub, 'add').mockRejectedValueOnce(makeError())
 
     const httpResponse = await sut.handle(makeFakeRequest())
 
     expect(httpResponse).toEqual(serverError(makeError()))
+  })
+
+  it('should return 500 if addAccount throws', async () => {
+    const error = new EmailInUseError()
+    const { sut, addAccountStub } = makeSut()
+    vi.spyOn(addAccountStub, 'add').mockRejectedValueOnce(error)
+
+    const httpResponse = await sut.handle(makeFakeRequest())
+
+    expect(httpResponse).toEqual(forbidden(error))
   })
 
   it('should call Authentication with correct values', async () => {
