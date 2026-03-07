@@ -1,3 +1,4 @@
+import type { Authentication, AuthenticationParams } from '@/domain/usecases'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http'
 
 import type {
@@ -52,19 +53,35 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth(_: AuthenticationParams): Promise<string> {
+      return await Promise.resolve('any_token')
+    }
+  }
+
+  return new AuthenticationStub()
+}
+
 interface SutTypes {
   sut: SignupController
   addAccountStub: AddAccount
   validationStub: Validation
+  authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
+  const authenticationStub = makeAuthentication()
 
-  const sut = new SignupController(addAccountStub, validationStub)
+  const sut = new SignupController(
+    addAccountStub,
+    validationStub,
+    authenticationStub
+  )
 
-  return { sut, addAccountStub, validationStub }
+  return { sut, addAccountStub, validationStub, authenticationStub }
 }
 
 describe('SignUp Controller', () => {
@@ -105,6 +122,17 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest())
 
     expect(httpResponse).toEqual(serverError(makeError()))
+  })
+
+  it('should call Authentication with correct values', async () => {
+    const request = makeFakeRequest()
+    const { email, password } = request.body
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = vi.spyOn(authenticationStub, 'auth')
+
+    await sut.handle(request)
+
+    expect(authSpy).toHaveBeenCalledWith({ email, password })
   })
 
   it('should return 200 if account is created', async () => {
