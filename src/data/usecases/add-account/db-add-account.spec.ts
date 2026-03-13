@@ -129,6 +129,18 @@ describe('DbAddAccount UseCase', () => {
     await expect(promise).rejects.toThrow(new EmailInUseError())
   })
 
+  it('should throw if LoadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    vi.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    ).mockRejectedValueOnce(new Error())
+
+    const promise = sut.add(makeAddAccountData())
+
+    await expect(promise).rejects.toThrow()
+  })
+
   it('should return an account on success', async () => {
     const { sut } = makeSut()
 
