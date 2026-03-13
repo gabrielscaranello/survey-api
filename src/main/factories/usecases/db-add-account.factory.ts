@@ -6,5 +6,9 @@ import { makeBcryptAdapter } from '@/main/factories'
 export const makeDbAddAccount = (): AddAccount => {
   const accountRepository = new AccountMongoRepository()
 
-  return new DbAddAccount(makeBcryptAdapter(), accountRepository)
+  return new DbAddAccount(
+    makeBcryptAdapter(),
+    accountRepository,
+    accountRepository
+  )
 }
