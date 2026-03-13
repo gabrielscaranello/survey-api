@@ -1,9 +1,12 @@
+import { EmailInUseError } from '@/domain/errors'
+
 import { DbAddAccount } from './db-add-account'
 import type {
   AccountModel,
   AddAccountModel,
   AddAccountRepository,
-  Hasher
+  Hasher,
+  LoadAccountByEmailRepository
 } from './db-add-account.protocols'
 
 const makeHasher = (): Hasher => {
@@ -39,18 +42,39 @@ const makeAddAccountRepository = (): AddAccountRepository => {
   return new AddAccountRepositoryStub()
 }
 
+const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    async loadByEmail(_email: string): Promise<AccountModel | null> {
+      return await Promise.resolve(null)
+    }
+  }
+
+  return new LoadAccountByEmailRepositoryStub()
+}
+
 interface SutTypes {
   sut: DbAddAccount
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
 }
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
+  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
+  const sut = new DbAddAccount(
+    hasherStub,
+    addAccountRepositoryStub,
+    loadAccountByEmailRepositoryStub
+  )
 
-  return { sut, hasherStub, addAccountRepositoryStub }
+  return {
+    sut,
+    hasherStub,
+    addAccountRepositoryStub,
+    loadAccountByEmailRepositoryStub
+  }
 }
 
 describe('DbAddAccount UseCase', () => {
@@ -91,6 +115,18 @@ describe('DbAddAccount UseCase', () => {
     const promise = sut.add(makeAddAccountData())
 
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should throw if an account is already registered with the given email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    vi.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    ).mockResolvedValueOnce(makeFakeAccount())
+
+    const promise = sut.add(makeAddAccountData())
+
+    await expect(promise).rejects.toThrow(new EmailInUseError())
   })
 
   it('should return an account on success', async () => {
