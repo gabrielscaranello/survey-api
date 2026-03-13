@@ -1,7 +1,7 @@
-import type { EmailValidator } from '@/presentation/protocols/email-validator'
+import type { EmailValidator } from '@/validation/protocols'
 
 import { InvalidParamError } from '@/presentation/errors'
-import { EmailValidation } from '@/presentation/helpers/validators'
+import { EmailValidation } from '@/validation/validators'
 
 const makeFakeInput = (): Record<string, string> => ({
   email: 'any_email@mail.com'

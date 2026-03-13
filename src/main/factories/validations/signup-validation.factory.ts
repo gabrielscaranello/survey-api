@@ -1,13 +1,13 @@
 import type { SignUpRequest } from '@/presentation/controllers'
 import type { Validation } from '@/presentation/protocols'
 
+import { EmailValidatorAdapter } from '@/utils'
 import {
   CompareFieldValidation,
   EmailValidation,
   RequiredFieldValidation,
   ValidationComposite
-} from '@/presentation/helpers/validators'
-import { EmailValidatorAdapter } from '@/utils'
+} from '@/validation/validators'
 
 export const makeSignupValidation = (): Validation => {
   const validations: Validation[] = []

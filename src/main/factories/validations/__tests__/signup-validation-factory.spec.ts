@@ -2,16 +2,16 @@ import type { SignUpRequest } from '@/presentation/controllers'
 import type { Validation } from '@/presentation/protocols'
 
 import { makeSignupValidation } from '@/main/factories'
+import { EmailValidatorAdapter } from '@/utils'
 import {
   CompareFieldValidation,
   EmailValidation,
   RequiredFieldValidation,
   ValidationComposite
-} from '@/presentation/helpers/validators'
-import { EmailValidatorAdapter } from '@/utils'
+} from '@/validation/validators'
 
-vi.mock('@/presentation/helpers/validators', async () => ({
-  ...(await vi.importActual('@/presentation/helpers/validators')),
+vi.mock('@/validation/validators', async () => ({
+  ...(await vi.importActual('@/validation/validators')),
   ValidationComposite: vi.fn()
 }))
 

@@ -1,18 +1,15 @@
 import type { Validation } from '@/presentation/protocols'
-import type { EmailValidator } from '@/presentation/protocols/email-validator'
 
 import { InvalidParamError } from '@/presentation/errors'
 
-export class EmailValidation implements Validation {
+export class CompareFieldValidation implements Validation {
   constructor(
     private readonly fieldName: string,
-    private readonly emailValidator: EmailValidator
+    private readonly fieldToCompareName: string
   ) {}
 
   validate(input: any): Error | null {
-    const isValid = this.emailValidator.isValid(String(input[this.fieldName]))
-
-    if (!isValid) {
+    if (input[this.fieldName] !== input[this.fieldToCompareName]) {
       return new InvalidParamError(this.fieldName)
     }
 

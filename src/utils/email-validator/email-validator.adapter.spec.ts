@@ -1,4 +1,4 @@
-import type { EmailValidator } from '@/presentation/protocols/email-validator'
+import type { EmailValidator } from '@/validation/protocols'
 
 import { EmailValidatorAdapter } from './email-validator.adapter'
 
