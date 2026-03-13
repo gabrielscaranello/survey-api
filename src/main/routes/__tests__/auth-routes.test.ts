@@ -1,9 +1,9 @@
-import { hash } from 'bcrypt'
 import type { Collection } from 'mongodb'
 import request from 'supertest'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 import { app } from '@/main/config/app'
+import { makeBcryptAdapter } from '@/main/factories'
 import type { SignUpRequest } from '@/presentation/controllers'
 import { HTTPStatusCode } from '@/presentation/protocols'
 
@@ -15,6 +15,7 @@ const makeFakeSignupRequestParams = (): SignUpRequest => ({
 })
 
 describe('Auth Routes', () => {
+  const bcryptAdapter = makeBcryptAdapter()
   let accountCollection: Collection
 
   beforeAll(async () => {
@@ -43,7 +44,7 @@ describe('Auth Routes', () => {
     it('should return 200 on success', async () => {
       const email = 'any_email@mail.com'
       const password = 'any_password'
-      const hashPassword = await hash(password, 12)
+      const hashPassword = await bcryptAdapter.hash(password)
       await accountCollection.insertOne({
         name: 'any_name',
         email,
