@@ -26,7 +26,7 @@ export default defineConfig({
         '**/{contracts,types,protocols}/**',
         '**/{contracts,index,types,protocols}.ts',
         'src/main/{adapters,config,server.ts}',
-        'src/main/factories/{controllers}'
+        'src/main/factories/{adapters,controllers,decorators,usecases}'
       ],
       thresholds: {
         statements: COVERAGE_PERCENT,
