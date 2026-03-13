@@ -1,8 +1,8 @@
 import type { SignUpRequest } from '@/presentation/controllers'
 import type { Validation } from '@/presentation/protocols'
 
+import { EmailValidatorAdapter } from '@/infra/validators'
 import { makeSignupValidation } from '@/main/factories'
-import { EmailValidatorAdapter } from '@/utils'
 import {
   CompareFieldValidation,
   EmailValidation,

@@ -1,7 +1,7 @@
 import type { LoginRequest } from '@/presentation/controllers'
 import type { Validation } from '@/presentation/protocols'
 
-import { EmailValidatorAdapter } from '@/utils'
+import { EmailValidatorAdapter } from '@/infra/validators'
 import {
   EmailValidation,
   RequiredFieldValidation,
