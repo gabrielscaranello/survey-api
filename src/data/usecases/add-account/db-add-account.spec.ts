@@ -117,12 +117,19 @@ describe('DbAddAccount UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 
+  it('should call LoadAccountByEmailRepository with correct email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+
+    await sut.add(makeAddAccountData())
+
+    expect(loadSpy).toBeCalledWith('any_email@mail.com')
+  })
+
   it('should throw if an account is already registered with the given email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    vi.spyOn(
-      loadAccountByEmailRepositoryStub,
-      'loadByEmail'
-    ).mockResolvedValueOnce(makeFakeAccount())
+    const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    loadSpy.mockResolvedValueOnce(makeFakeAccount())
 
     const promise = sut.add(makeAddAccountData())
 
@@ -131,10 +138,8 @@ describe('DbAddAccount UseCase', () => {
 
   it('should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    vi.spyOn(
-      loadAccountByEmailRepositoryStub,
-      'loadByEmail'
-    ).mockRejectedValueOnce(new Error())
+    const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    loadSpy.mockRejectedValueOnce(new Error())
 
     const promise = sut.add(makeAddAccountData())
 
