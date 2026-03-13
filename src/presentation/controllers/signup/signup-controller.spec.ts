@@ -1,20 +1,20 @@
 import { EmailInUseError } from '@/domain/errors'
-import type { Authentication, AuthenticationParams } from '@/domain/usecases'
+import type { AccountModel } from '@/domain/models'
+import type {
+  AddAccount,
+  AddAccountModel,
+  Authentication,
+  AuthenticationParams
+} from '@/domain/usecases'
 import {
   badRequest,
   forbidden,
   ok,
   serverError
 } from '@/presentation/helpers/http'
+import type { HttpRequest, Validation } from '@/presentation/protocols'
 
-import type {
-  AccountModel,
-  AddAccount,
-  AddAccountModel,
-  HttpRequest,
-  SignUpRequest,
-  Validation
-} from './signup-controller.protocols'
+import type { SignUpRequest } from './signup-controller-request'
 import { SignupController } from './signup.controller'
 
 const makeError = (): Error => {

@@ -1,4 +1,4 @@
-import type { AddAccountModel } from './signup-controller.protocols'
+import type { AddAccountModel } from '@/domain/usecases'
 
 export interface SignUpRequest extends AddAccountModel {
   passwordConfirmation: string

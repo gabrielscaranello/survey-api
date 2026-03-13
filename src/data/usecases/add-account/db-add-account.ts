@@ -1,13 +1,11 @@
-import { EmailInUseError } from '@/domain/errors'
-
 import type {
-  AccountModel,
-  AddAccount,
-  AddAccountModel,
   AddAccountRepository,
   Hasher,
   LoadAccountByEmailRepository
-} from './db-add-account.protocols'
+} from '@/data/protocols'
+import { EmailInUseError } from '@/domain/errors'
+import type { AccountModel } from '@/domain/models'
+import type { AddAccount, AddAccountModel } from '@/domain/usecases'
 
 export class DbAddAccount implements AddAccount {
   constructor(

@@ -1,13 +1,13 @@
-import { EmailInUseError } from '@/domain/errors'
-
-import { DbAddAccount } from './db-add-account'
 import type {
-  AccountModel,
-  AddAccountModel,
   AddAccountRepository,
   Hasher,
   LoadAccountByEmailRepository
-} from './db-add-account.protocols'
+} from '@/data/protocols'
+import { EmailInUseError } from '@/domain/errors'
+import type { AccountModel } from '@/domain/models'
+import type { AddAccountModel } from '@/domain/usecases'
+
+import { DbAddAccount } from './db-add-account'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
