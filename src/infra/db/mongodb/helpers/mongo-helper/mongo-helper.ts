@@ -1,5 +1,6 @@
-import { MongoClient, type Collection, type WithId } from 'mongodb'
+import { MongoClient } from 'mongodb'
 
+import type { Collection, WithId } from 'mongodb'
 import type { MongoMapResult } from './mongo-helper.protocols'
 
 let _client: null | MongoClient = null

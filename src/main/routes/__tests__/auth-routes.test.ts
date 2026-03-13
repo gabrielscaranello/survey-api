@@ -1,10 +1,11 @@
-import type { Collection } from 'mongodb'
 import request from 'supertest'
+
+import type { SignUpRequest } from '@/presentation/controllers'
+import type { Collection } from 'mongodb'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 import { app } from '@/main/config/app'
 import { makeBcryptAdapter } from '@/main/factories'
-import type { SignUpRequest } from '@/presentation/controllers'
 import { HTTPStatusCode } from '@/presentation/protocols'
 
 const makeFakeSignupRequestParams = (): SignUpRequest => ({

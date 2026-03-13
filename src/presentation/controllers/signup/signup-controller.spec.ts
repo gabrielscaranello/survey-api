@@ -1,4 +1,3 @@
-import { EmailInUseError } from '@/domain/errors'
 import type { AccountModel } from '@/domain/models'
 import type {
   AddAccount,
@@ -6,15 +5,17 @@ import type {
   Authentication,
   AuthenticationParams
 } from '@/domain/usecases'
+import type { HttpRequest, Validation } from '@/presentation/protocols'
+import type { SignUpRequest } from './signup-controller-request'
+
+import { EmailInUseError } from '@/domain/errors'
 import {
   badRequest,
   forbidden,
   ok,
   serverError
 } from '@/presentation/helpers/http'
-import type { HttpRequest, Validation } from '@/presentation/protocols'
 
-import type { SignUpRequest } from './signup-controller-request'
 import { SignupController } from './signup.controller'
 
 const makeError = (): Error => {

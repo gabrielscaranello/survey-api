@@ -1,12 +1,13 @@
-import { makeSignupValidation } from '@/main/factories'
 import type { SignUpRequest } from '@/presentation/controllers'
+import type { Validation } from '@/presentation/protocols'
+
+import { makeSignupValidation } from '@/main/factories'
 import {
   CompareFieldValidation,
   EmailValidation,
   RequiredFieldValidation,
   ValidationComposite
 } from '@/presentation/helpers/validators'
-import type { Validation } from '@/presentation/protocols'
 import { EmailValidatorAdapter } from '@/utils'
 
 vi.mock('@/presentation/helpers/validators', async () => ({

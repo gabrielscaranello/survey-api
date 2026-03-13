@@ -1,13 +1,14 @@
 import type { Authentication, AuthenticationParams } from '@/domain/usecases'
+import type { HttpRequest, Validation } from '@/presentation/protocols'
+import type { LoginRequest } from './login-controller-request'
+
 import {
   badRequest,
   ok,
   serverError,
   unauthorized
 } from '@/presentation/helpers/http'
-import type { HttpRequest, Validation } from '@/presentation/protocols'
 
-import type { LoginRequest } from './login-controller-request'
 import { LoginController } from './login.controller'
 
 const makeFakeRequest = (): HttpRequest<LoginRequest> => ({

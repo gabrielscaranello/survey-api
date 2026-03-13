@@ -1,10 +1,11 @@
 import type { LogErrorRepository } from '@/data/protocols'
-import {
-  HTTPStatusCode,
-  type Controller,
-  type HttpRequest,
-  type HttpResponse
+import type {
+  Controller,
+  HttpRequest,
+  HttpResponse
 } from '@/presentation/protocols'
+
+import { HTTPStatusCode } from '@/presentation/protocols'
 
 export class LogControllerDecorator implements Controller {
   constructor(

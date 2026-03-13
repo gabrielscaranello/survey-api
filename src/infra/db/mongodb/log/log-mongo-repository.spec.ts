@@ -7,8 +7,6 @@ import { LogMongoRepository } from './log-mongo.repository'
 const makeSut = (): LogMongoRepository => new LogMongoRepository()
 
 describe('Log Mongo Repository', () => {
-  /* eslint-disable-next-line @typescript-eslint/init-declarations --
-   * value is been defined in beforeAll */
   let errorCollection: Collection
 
   beforeAll(async () => {

@@ -3,9 +3,10 @@ import type {
   Hasher,
   LoadAccountByEmailRepository
 } from '@/data/protocols'
-import { EmailInUseError } from '@/domain/errors'
 import type { AccountModel } from '@/domain/models'
 import type { AddAccount, AddAccountModel } from '@/domain/usecases'
+
+import { EmailInUseError } from '@/domain/errors'
 
 export class DbAddAccount implements AddAccount {
   constructor(

@@ -1,4 +1,6 @@
-import { Router, type Express } from 'express'
+import { Router } from 'express'
+
+import type { Express } from 'express'
 
 import { authRoutes } from '@/main/routes'
 

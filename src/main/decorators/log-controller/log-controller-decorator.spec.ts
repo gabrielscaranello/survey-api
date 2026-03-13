@@ -1,10 +1,11 @@
 import type { LogErrorRepository } from '@/data/protocols'
-import { ok, serverError } from '@/presentation/helpers/http'
 import type {
   Controller,
   HttpRequest,
   HttpResponse
 } from '@/presentation/protocols'
+
+import { ok, serverError } from '@/presentation/helpers/http'
 
 import { LogControllerDecorator } from './log-controller.decorator'
 

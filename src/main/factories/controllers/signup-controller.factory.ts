@@ -1,3 +1,5 @@
+import type { Controller } from '@/presentation/protocols'
+
 import {
   makeDbAddAccount,
   makeDbAuthentication,
@@ -5,7 +7,6 @@ import {
   makeSignupValidation
 } from '@/main/factories'
 import { SignupController } from '@/presentation/controllers'
-import type { Controller } from '@/presentation/protocols'
 
 export const makeSignUp = (): Controller => {
   const signupController = new SignupController(

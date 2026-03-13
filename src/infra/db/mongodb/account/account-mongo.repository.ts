@@ -1,4 +1,4 @@
-import { ObjectId, type WithId } from 'mongodb'
+import { ObjectId } from 'mongodb'
 
 import type {
   AddAccountRepository,
@@ -7,6 +7,8 @@ import type {
 } from '@/data/protocols'
 import type { AccountModel } from '@/domain/models'
 import type { AddAccountModel } from '@/domain/usecases'
+import type { WithId } from 'mongodb'
+
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
 export class AccountMongoRepository

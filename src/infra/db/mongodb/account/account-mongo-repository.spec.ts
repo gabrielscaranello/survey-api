@@ -1,7 +1,7 @@
-import type { Collection } from 'mongodb'
-
 import type { AccountModel } from '@/domain/models'
 import type { AddAccountModel } from '@/domain/usecases'
+import type { Collection } from 'mongodb'
+
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
 import { AccountMongoRepository } from './account-mongo.repository'
