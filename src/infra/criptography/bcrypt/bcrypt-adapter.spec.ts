@@ -1,4 +1,4 @@
-import { BcryptAdapter } from './bcrypt.adapter'
+import { BcryptAdapter } from './bcrypt-adapter'
 
 const mockedHash = vi.fn().mockReturnValue('hashed_value')
 const mockedCompare = vi.fn().mockReturnValue(true)

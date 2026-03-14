@@ -1,2 +1,2 @@
 // Module exports
-export * from './log-mongo.repository'
+export * from './log-mongo-repository'

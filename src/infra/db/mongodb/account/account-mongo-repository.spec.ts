@@ -4,7 +4,7 @@ import type { Collection } from 'mongodb'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
-import { AccountMongoRepository } from './account-mongo.repository'
+import { AccountMongoRepository } from './account-mongo-repository'
 
 const mockAddAccountParams = (): AddAccountParams => ({
   name: 'any_name',

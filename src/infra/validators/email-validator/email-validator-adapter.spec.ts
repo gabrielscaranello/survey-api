@@ -1,6 +1,6 @@
 import type { EmailValidator } from '@/validation/protocols'
 
-import { EmailValidatorAdapter } from './email-validator.adapter'
+import { EmailValidatorAdapter } from './email-validator-adapter'
 
 const mockedIsEmail = vi.fn().mockReturnValue(true)
 

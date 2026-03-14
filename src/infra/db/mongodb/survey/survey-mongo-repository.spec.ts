@@ -3,7 +3,7 @@ import type { Collection } from 'mongodb'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
-import { SurveyMongoRepository } from './survey-mongo.repository'
+import { SurveyMongoRepository } from './survey-mongo-repository'
 
 const mockAddSurveyParams = (): AddSurveyParams => ({
   question: 'any_question',

@@ -1,2 +1,2 @@
 // Module exports
-export * from './survey-mongo.repository'
+export * from './survey-mongo-repository'

@@ -1,4 +1,4 @@
-import { JWTAdapter } from './jwt.adapter'
+import { JWTAdapter } from './jwt-adapter'
 
 const mockedSign = vi.fn().mockReturnValue('any_token')
 vi.mock('jsonwebtoken', () => ({
