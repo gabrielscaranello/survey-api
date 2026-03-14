@@ -1,6 +1,8 @@
 import type { HttpRequest, Validation } from '@/presentation/protocols'
 import type { AddSurveyRequest } from './add-survey.protocols'
 
+import { badRequest } from '@/presentation/helpers/http'
+
 import { AddSurveyController } from './add-survey.controller'
 
 const mockRequest = (): HttpRequest<AddSurveyRequest> => ({
@@ -40,5 +42,15 @@ describe('AddSurvey Controller', () => {
     await sut.handle(httpRequest)
 
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  it('should return 400 if validation fails', async () => {
+    const error = new Error('any_error')
+    const { sut, validationStub } = makeSut()
+    vi.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
+
+    const httpResponse = await sut.handle(mockRequest())
+
+    expect(httpResponse).toEqual(badRequest(error))
   })
 })
