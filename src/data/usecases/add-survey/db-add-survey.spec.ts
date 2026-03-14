@@ -45,4 +45,13 @@ describe('DbAddSurvey UseCase', () => {
 
     expect(addSpy).toHaveBeenCalledWith(params)
   })
+
+  it('should throw if AddSurveyRepository throws', async () => {
+    const { sut, addSurveyRepositoryStub } = makeSut()
+    vi.spyOn(addSurveyRepositoryStub, 'add').mockRejectedValueOnce(new Error())
+
+    const promise = sut.add(mockAddSurveyParams())
+
+    await expect(promise).rejects.toThrow()
+  })
 })
