@@ -5,7 +5,7 @@ import type {
   HttpResponse,
   Validation
 } from '@/presentation/protocols'
-import type { SignUpRequest } from './signup-controller-request'
+import type { SignUpRequest } from './signup-controller.types'
 
 import { EmailInUseError } from '@/domain/errors'
 import {

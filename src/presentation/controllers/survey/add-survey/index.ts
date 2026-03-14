@@ -1,5 +1,5 @@
 // Type exports
-export type * from './add-survey.protocols'
+export type * from './add-survey.types'
 
 // Module exports
-export * from './add-survey.controller'
+export * from './add-survey-controller'

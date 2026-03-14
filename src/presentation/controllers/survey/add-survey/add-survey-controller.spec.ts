@@ -1,10 +1,10 @@
 import type { AddSurvey, AddSurveyParams } from '@/domain/usecases'
 import type { HttpRequest, Validation } from '@/presentation/protocols'
-import type { AddSurveyRequest } from './add-survey.protocols'
+import type { AddSurveyRequest } from './add-survey.types'
 
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http'
 
-import { AddSurveyController } from './add-survey.controller'
+import { AddSurveyController } from './add-survey-controller'
 
 const mockRequest = (): HttpRequest<AddSurveyRequest> => ({
   body: {

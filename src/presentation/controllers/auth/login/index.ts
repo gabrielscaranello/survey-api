@@ -1,5 +1,5 @@
 // Type exports
-export type * from './login-controller-request'
+export type * from './login-controller.types'
 
 // Module exports
-export * from './login.controller'
+export * from './login-controller'

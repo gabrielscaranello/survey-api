@@ -5,7 +5,7 @@ import type {
   HttpResponse,
   Validation
 } from '@/presentation/protocols'
-import type { AddSurveyRequest } from './add-survey.protocols'
+import type { AddSurveyRequest } from './add-survey.types'
 
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http'
 

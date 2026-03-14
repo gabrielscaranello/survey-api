@@ -1,6 +1,6 @@
 import type { Authentication, AuthenticationParams } from '@/domain/usecases'
 import type { HttpRequest, Validation } from '@/presentation/protocols'
-import type { LoginRequest } from './login-controller-request'
+import type { LoginRequest } from './login-controller.types'
 
 import {
   badRequest,
@@ -9,7 +9,7 @@ import {
   unauthorized
 } from '@/presentation/helpers/http'
 
-import { LoginController } from './login.controller'
+import { LoginController } from './login-controller'
 
 const makeFakeRequest = (): HttpRequest<LoginRequest> => ({
   body: {

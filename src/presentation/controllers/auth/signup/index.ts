@@ -1,5 +1,5 @@
 // Type exports
-export type * from './signup-controller-request'
+export type * from './signup-controller.types'
 
 // Module exports
-export * from './signup.controller'
+export * from './signup-controller'
