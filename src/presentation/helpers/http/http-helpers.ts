@@ -8,6 +8,11 @@ export const ok = <T>(data: T): HttpResponse<T> => ({
   statusCode: HTTPStatusCode.OK
 })
 
+export const noContent = (): HttpResponse<null> => ({
+  statusCode: HTTPStatusCode.NO_CONTENT,
+  body: null
+})
+
 export const badRequest = (error: Error): HttpResponse<Error> => ({
   statusCode: HTTPStatusCode.BAD_REQUEST,
   body: error

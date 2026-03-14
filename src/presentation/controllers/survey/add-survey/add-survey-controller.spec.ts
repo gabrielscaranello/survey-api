@@ -2,7 +2,7 @@ import type { AddSurvey, AddSurveyParams } from '@/domain/usecases'
 import type { HttpRequest, Validation } from '@/presentation/protocols'
 import type { AddSurveyRequest } from './add-survey.protocols'
 
-import { badRequest, serverError } from '@/presentation/helpers/http'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http'
 
 import { AddSurveyController } from './add-survey.controller'
 
@@ -85,5 +85,13 @@ describe('AddSurvey Controller', () => {
     const httpResponse = await sut.handle(mockRequest())
 
     expect(httpResponse).toEqual(serverError(error))
+  })
+
+  it('should return 204 on success', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle(mockRequest())
+
+    expect(httpResponse).toEqual(noContent())
   })
 })

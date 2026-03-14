@@ -7,7 +7,7 @@ import type {
 } from '@/presentation/protocols'
 import type { AddSurveyRequest } from './add-survey.protocols'
 
-import { badRequest, serverError } from '@/presentation/helpers/http'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http'
 
 export class AddSurveyController implements Controller {
   constructor(
@@ -27,7 +27,7 @@ export class AddSurveyController implements Controller {
       const { question, answers } = httpRequest.body
       await this.addSurvey.add({ question, answers })
 
-      return badRequest(new Error('Not complete implemented'))
+      return noContent()
     } catch (error) {
       return serverError(error)
     }
