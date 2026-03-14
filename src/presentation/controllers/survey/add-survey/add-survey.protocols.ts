@@ -1,9 +1,3 @@
-interface Answer {
-  image?: string
-  answer: string
-}
+import type { AddSurveyParams } from '@/domain/usecases'
 
-export interface AddSurveyRequest {
-  question: string
-  answers: Answer[]
-}
+export type AddSurveyRequest = AddSurveyParams

@@ -1,3 +1,4 @@
+import type { AddSurvey, AddSurveyParams } from '@/domain/usecases'
 import type { HttpRequest, Validation } from '@/presentation/protocols'
 import type { AddSurveyRequest } from './add-survey.protocols'
 
@@ -22,15 +23,27 @@ const mockValidation = (): Validation => {
   return new ValidationStub()
 }
 
+const mockAddSurvey = (): AddSurvey => {
+  class AddSurveyStub implements AddSurvey {
+    async add(_: AddSurveyParams): Promise<void> {
+      await Promise.resolve()
+    }
+  }
+
+  return new AddSurveyStub()
+}
+
 interface SutTypes {
   sut: AddSurveyController
   validationStub: Validation
+  addSurveyStub: AddSurvey
 }
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
-  const sut = new AddSurveyController(validationStub)
+  const addSurveyStub = mockAddSurvey()
+  const sut = new AddSurveyController(validationStub, addSurveyStub)
 
-  return { sut, validationStub }
+  return { sut, validationStub, addSurveyStub }
 }
 
 describe('AddSurvey Controller', () => {
@@ -52,5 +65,15 @@ describe('AddSurvey Controller', () => {
     const httpResponse = await sut.handle(mockRequest())
 
     expect(httpResponse).toEqual(badRequest(error))
+  })
+
+  it('should call AddSurvey with correct values', async () => {
+    const httpRequest = mockRequest()
+    const { sut, addSurveyStub } = makeSut()
+    const addSurveySpy = vi.spyOn(addSurveyStub, 'add')
+
+    await sut.handle(httpRequest)
+
+    expect(addSurveySpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
