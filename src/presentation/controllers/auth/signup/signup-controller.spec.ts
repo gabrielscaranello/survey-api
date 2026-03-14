@@ -1,7 +1,7 @@
 import type { AccountModel } from '@/domain/models'
 import type {
   AddAccount,
-  AddAccountModel,
+  AddAccountParams,
   Authentication,
   AuthenticationParams
 } from '@/domain/usecases'
@@ -42,7 +42,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(_account: AddAccountModel): Promise<AccountModel> {
+    async add(_: AddAccountParams): Promise<AccountModel> {
       return await Promise.resolve(makeFakeAccount())
     }
   }
@@ -52,7 +52,7 @@ const makeAddAccount = (): AddAccount => {
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
-    validate(_input: any): Error | null {
+    validate(_: any): Error | null {
       return null
     }
   }

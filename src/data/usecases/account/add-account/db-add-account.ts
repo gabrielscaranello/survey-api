@@ -4,7 +4,7 @@ import type {
   LoadAccountByEmailRepository
 } from '@/data/protocols'
 import type { AccountModel } from '@/domain/models'
-import type { AddAccount, AddAccountModel } from '@/domain/usecases'
+import type { AddAccount, AddAccountParams } from '@/domain/usecases'
 
 import { EmailInUseError } from '@/domain/errors'
 
@@ -15,8 +15,8 @@ export class DbAddAccount implements AddAccount {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
   ) {}
 
-  async add(data: AddAccountModel): Promise<AccountModel> {
-    const { email, password } = data
+  async add(params: AddAccountParams): Promise<AccountModel> {
+    const { email, password } = params
     const exists = await this.loadAccountByEmailRepository.loadByEmail(email)
     if (exists) {
       throw new EmailInUseError()
@@ -24,7 +24,7 @@ export class DbAddAccount implements AddAccount {
 
     const hashedPassword = await this.hasher.hash(password)
     const account = await this.addAccountRepository.add({
-      ...data,
+      ...params,
       password: hashedPassword
     })
 

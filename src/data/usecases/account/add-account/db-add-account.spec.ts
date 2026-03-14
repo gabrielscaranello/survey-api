@@ -4,7 +4,7 @@ import type {
   LoadAccountByEmailRepository
 } from '@/data/protocols'
 import type { AccountModel } from '@/domain/models'
-import type { AddAccountModel } from '@/domain/usecases'
+import type { AddAccountParams } from '@/domain/usecases'
 
 import { EmailInUseError } from '@/domain/errors'
 
@@ -20,7 +20,7 @@ const makeHasher = (): Hasher => {
   return new HasherStub()
 }
 
-const makeAddAccountData = (): AddAccountModel => ({
+const mockAddAccountParams = (): AddAccountParams => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password'
@@ -35,7 +35,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(_data: AddAccountModel): Promise<AccountModel> {
+    async add(_: AddAccountParams): Promise<AccountModel> {
       return await Promise.resolve(makeFakeAccount())
     }
   }
@@ -45,7 +45,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async loadByEmail(_email: string): Promise<AccountModel | null> {
+    async loadByEmail(_: string): Promise<AccountModel | null> {
       return await Promise.resolve(null)
     }
   }
@@ -80,40 +80,40 @@ const makeSut = (): SutTypes => {
 
 describe('DbAddAccount UseCase', () => {
   it('should call Hasher with correct password', async () => {
-    const addAccountData = makeAddAccountData()
+    const addAccountParams = mockAddAccountParams()
     const { sut, hasherStub } = makeSut()
     const hasherSpy = vi.spyOn(hasherStub, 'hash')
 
-    await sut.add(addAccountData)
+    await sut.add(addAccountParams)
 
-    expect(hasherSpy).toBeCalledWith(addAccountData.password)
+    expect(hasherSpy).toBeCalledWith(addAccountParams.password)
   })
 
   it('should throw if Hasher throws', async () => {
     const { sut, hasherStub } = makeSut()
     vi.spyOn(hasherStub, 'hash').mockRejectedValueOnce(new Error())
 
-    const promise = sut.add(makeAddAccountData())
+    const promise = sut.add(mockAddAccountParams())
 
     await expect(promise).rejects.toThrow()
   })
 
   it('should call AddAccountRepository with correct values', async () => {
-    const addAccountData = makeAddAccountData()
+    const addAccountParams = mockAddAccountParams()
     const { password } = makeFakeAccount()
     const { sut, addAccountRepositoryStub } = makeSut()
     const addSpy = vi.spyOn(addAccountRepositoryStub, 'add')
 
-    await sut.add(addAccountData)
+    await sut.add(addAccountParams)
 
-    expect(addSpy).toBeCalledWith({ ...addAccountData, password })
+    expect(addSpy).toBeCalledWith({ ...addAccountParams, password })
   })
 
   it('should throw if AddAccountRepository throws', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     vi.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(new Error())
 
-    const promise = sut.add(makeAddAccountData())
+    const promise = sut.add(mockAddAccountParams())
 
     await expect(promise).rejects.toThrow()
   })
@@ -122,7 +122,7 @@ describe('DbAddAccount UseCase', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
 
-    await sut.add(makeAddAccountData())
+    await sut.add(mockAddAccountParams())
 
     expect(loadSpy).toBeCalledWith('any_email@mail.com')
   })
@@ -132,7 +132,7 @@ describe('DbAddAccount UseCase', () => {
     const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
     loadSpy.mockResolvedValueOnce(makeFakeAccount())
 
-    const promise = sut.add(makeAddAccountData())
+    const promise = sut.add(mockAddAccountParams())
 
     await expect(promise).rejects.toThrow(new EmailInUseError())
   })
@@ -142,7 +142,7 @@ describe('DbAddAccount UseCase', () => {
     const loadSpy = vi.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
     loadSpy.mockRejectedValueOnce(new Error())
 
-    const promise = sut.add(makeAddAccountData())
+    const promise = sut.add(mockAddAccountParams())
 
     await expect(promise).rejects.toThrow()
   })
@@ -150,7 +150,7 @@ describe('DbAddAccount UseCase', () => {
   it('should return an account on success', async () => {
     const { sut } = makeSut()
 
-    const account = await sut.add(makeAddAccountData())
+    const account = await sut.add(mockAddAccountParams())
 
     expect(account).toEqual(makeFakeAccount())
   })

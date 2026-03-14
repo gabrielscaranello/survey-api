@@ -1,12 +1,12 @@
 import type { AccountModel } from '@/domain/models'
-import type { AddAccountModel } from '@/domain/usecases'
+import type { AddAccountParams } from '@/domain/usecases'
 import type { Collection } from 'mongodb'
 
 import { MongoHelper } from '@/infra/db/mongodb/helpers'
 
 import { AccountMongoRepository } from './account-mongo.repository'
 
-const makeAddAccountData = (): AddAccountModel => ({
+const mockAddAccountParams = (): AddAccountParams => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password'
@@ -31,17 +31,17 @@ describe('Account Mongo Repository', () => {
   })
 
   it('should return an account on save success', async () => {
-    const data = makeAddAccountData()
+    const params = mockAddAccountParams()
     const sut = makeSut()
 
-    const account = await sut.add(data)
+    const account = await sut.add(params)
 
     expect(account).toBeTruthy()
     expect(account).not.toHaveProperty('_id')
     expect(account.id).toBeTruthy()
-    expect(account.name).toBe(data.name)
-    expect(account.email).toBe(data.email)
-    expect(account.password).toBe(data.password)
+    expect(account.name).toBe(params.name)
+    expect(account.email).toBe(params.email)
+    expect(account.password).toBe(params.password)
   })
 
   it('should return null if LoadAccountByEmailRepository returns null', async () => {
@@ -52,21 +52,21 @@ describe('Account Mongo Repository', () => {
   })
 
   it('should load an account by email', async () => {
-    const data = makeAddAccountData()
-    const { insertedId } = await accountCollection.insertOne(data)
+    const params = mockAddAccountParams()
+    const { insertedId } = await accountCollection.insertOne(params)
     const sut = makeSut()
 
-    const account = await sut.loadByEmail(data.email)
+    const account = await sut.loadByEmail(params.email)
 
     expect(account).not.toBeNull()
     expect(account).not.toHaveProperty('_id')
-    expect(account?.email).toBe(data.email)
+    expect(account?.email).toBe(params.email)
     expect(account?.id).toBe(insertedId.toString())
   })
 
   it('should update accessToken on updateAccessToken success', async () => {
-    const data = makeAddAccountData()
-    const { insertedId: id } = await accountCollection.insertOne(data)
+    const params = mockAddAccountParams()
+    const { insertedId: id } = await accountCollection.insertOne(params)
     let account = await accountCollection.findOne<AccountModel>({ _id: id })
     expect(account?.accessToken).toBeFalsy()
 
