@@ -4,6 +4,8 @@ import type { Request, Response } from 'express'
 import { ServerError } from '@/presentation/errors'
 import { HTTPStatusCode } from '@/presentation/protocols'
 
+const successStatus = [HTTPStatusCode.OK, HTTPStatusCode.NO_CONTENT]
+
 export const adaptRoute =
   (controller: Controller) => async (req: Request, res: Response) => {
     const httpRequest: HttpRequest = {
@@ -13,7 +15,7 @@ export const adaptRoute =
       body: req.body
     }
     const httpResponse = await controller.handle(httpRequest)
-    if (httpResponse.statusCode === HTTPStatusCode.OK) {
+    if (successStatus.includes(httpResponse.statusCode)) {
       return res.status(httpResponse.statusCode).send(httpResponse.body)
     }
 

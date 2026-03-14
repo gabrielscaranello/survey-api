@@ -2,7 +2,7 @@ import type { Controller, HttpResponse } from '@/presentation/protocols'
 import type { Request, Response } from 'express'
 
 import { ServerError } from '@/presentation/errors'
-import { badRequest, ok } from '@/presentation/helpers/http'
+import { badRequest, noContent, ok } from '@/presentation/helpers/http'
 import { HTTPStatusCode } from '@/presentation/protocols'
 
 import { adaptRoute } from './express-router.adapter'
@@ -82,6 +82,18 @@ describe('Express Route Adapter', () => {
     expect(result).toEqual(body)
     expect(mockStatus).toHaveBeenCalledWith(statusCode)
     expect(mockSend).toHaveBeenCalledWith(body)
+  })
+
+  it('should return same result of the controller with status code 204', async () => {
+    const httpResponse = noContent()
+    const { sut, requestStub, responseStub, controllerStub } = makeSut()
+    vi.spyOn(controllerStub, 'handle').mockResolvedValueOnce(httpResponse)
+
+    const result = await sut(requestStub, responseStub)
+
+    expect(result).toEqual(null)
+    expect(mockStatus).toHaveBeenCalledWith(httpResponse.statusCode)
+    expect(mockSend).toHaveBeenCalledWith(null)
   })
 
   it('should return internal server error message when controller provide error', async () => {
