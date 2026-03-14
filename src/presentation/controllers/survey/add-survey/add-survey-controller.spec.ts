@@ -2,7 +2,7 @@ import type { AddSurvey, AddSurveyParams } from '@/domain/usecases'
 import type { HttpRequest, Validation } from '@/presentation/protocols'
 import type { AddSurveyRequest } from './add-survey.protocols'
 
-import { badRequest } from '@/presentation/helpers/http'
+import { badRequest, serverError } from '@/presentation/helpers/http'
 
 import { AddSurveyController } from './add-survey.controller'
 
@@ -75,5 +75,15 @@ describe('AddSurvey Controller', () => {
     await sut.handle(httpRequest)
 
     expect(addSurveySpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  it('should return 500 if AddSurvey throws', async () => {
+    const error = new Error()
+    const { sut, addSurveyStub } = makeSut()
+    vi.spyOn(addSurveyStub, 'add').mockRejectedValueOnce(error)
+
+    const httpResponse = await sut.handle(mockRequest())
+
+    expect(httpResponse).toEqual(serverError(error))
   })
 })

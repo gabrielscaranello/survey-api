@@ -7,7 +7,7 @@ import type {
 } from '@/presentation/protocols'
 import type { AddSurveyRequest } from './add-survey.protocols'
 
-import { badRequest } from '@/presentation/helpers/http'
+import { badRequest, serverError } from '@/presentation/helpers/http'
 
 export class AddSurveyController implements Controller {
   constructor(
@@ -18,14 +18,18 @@ export class AddSurveyController implements Controller {
   async handle(
     httpRequest: HttpRequest<AddSurveyRequest>
   ): Promise<HttpResponse> {
-    const error = this.validation.validate(httpRequest.body)
-    if (error) {
-      return await Promise.resolve(badRequest(error))
+    try {
+      const error = this.validation.validate(httpRequest.body)
+      if (error) {
+        return await Promise.resolve(badRequest(error))
+      }
+
+      const { question, answers } = httpRequest.body
+      await this.addSurvey.add({ question, answers })
+
+      return badRequest(new Error('Not complete implemented'))
+    } catch (error) {
+      return serverError(error)
     }
-
-    const { question, answers } = httpRequest.body
-    await this.addSurvey.add({ question, answers })
-
-    return badRequest(new Error('Not complete implemented'))
   }
 }
