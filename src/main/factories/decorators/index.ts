@@ -1,2 +1,2 @@
 // Module exports
-export * from './error-log-decorator.factory'
+export * from './error-log-decorator-factory'

@@ -1,11 +1,9 @@
 import type { Controller } from '@/presentation/protocols'
 
-import {
-  makeAddSurveyValidation,
-  makeDbAddSurvey,
-  makeErrorLogDecorator
-} from '@/main/factories'
+import { makeDbAddSurvey, makeErrorLogDecorator } from '@/main/factories'
 import { AddSurveyController } from '@/presentation/controllers'
+
+import { makeAddSurveyValidation } from './add-survey-validation-factory'
 
 export const makeAddSurveyController = (): Controller => {
   const addSurveyController = new AddSurveyController(

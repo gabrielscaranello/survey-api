@@ -1,3 +1,3 @@
 // Module exports
-export * from './auth.routes'
-export * from './survey.routes'
+export * from './auth-routes'
+export * from './survey-routes'

@@ -3,12 +3,13 @@ import type { Controller } from '@/presentation/protocols'
 import {
   makeDbAddAccount,
   makeDbAuthentication,
-  makeErrorLogDecorator,
-  makeSignupValidation
+  makeErrorLogDecorator
 } from '@/main/factories'
 import { SignupController } from '@/presentation/controllers'
 
-export const makeSignUp = (): Controller => {
+import { makeSignupValidation } from './signup-validation-factory'
+
+export const makeSignUpController = (): Controller => {
   const signupController = new SignupController(
     makeDbAddAccount(),
     makeSignupValidation(),

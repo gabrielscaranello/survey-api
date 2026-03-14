@@ -5,7 +5,7 @@ import { ServerError } from '@/presentation/errors'
 import { badRequest, noContent, ok } from '@/presentation/helpers/http'
 import { HTTPStatusCode } from '@/presentation/protocols'
 
-import { adaptRoute } from './express-router.adapter'
+import { adaptRoute } from './express-router-adapter'
 
 const mockHttpResponse = (): HttpResponse<Record<string, string>> =>
   ok({ anything: 'any_value' })

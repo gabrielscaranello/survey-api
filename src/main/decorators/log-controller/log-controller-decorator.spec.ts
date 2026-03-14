@@ -7,7 +7,7 @@ import type {
 
 import { ok, serverError } from '@/presentation/helpers/http'
 
-import { LogControllerDecorator } from './log-controller.decorator'
+import { LogControllerDecorator } from './log-controller-decorator'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: { foo: 'bar' }
