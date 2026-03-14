@@ -1,0 +1,11 @@
+### Surveys - Add Survey
+
+POST http://localhost:{{PORT}}/api/surveys HTTP/1.1
+
+{
+  "question": "any_question",
+  "answers": [
+    { "image": "any_image", "answer": "any_answer" },
+    { "answer": "other_answer" }
+  ]
+}
