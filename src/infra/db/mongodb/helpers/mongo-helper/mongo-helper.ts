@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 
 import type { Collection, WithId } from 'mongodb'
-import type { MongoMapResult } from './mongo-helper.protocols'
+import type { MongoMapResult } from './mongo-helper.types'
 
 let _client: null | MongoClient = null
 let _connecting = false

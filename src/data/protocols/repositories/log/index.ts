@@ -1,2 +1,2 @@
 // Type exports
-export type * from './log-error.repository'
+export type * from './log-error-repository'
