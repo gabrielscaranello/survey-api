@@ -25,7 +25,7 @@ export default defineConfig({
         '**/*.{d,config}.ts',
         '**/{contracts,types,protocols}/**',
         '**/{contracts,index,types,protocols}.ts',
-        'src/main/{adapters,config,server.ts}',
+        'src/main/{config,server.ts}',
         'src/main/factories/{adapters,controllers,decorators,usecases}'
       ],
       thresholds: {
