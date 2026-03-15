@@ -43,6 +43,16 @@ describe('Body Validation', () => {
     expect(body).toBe(null)
   })
 
+  it('should throw if Validation throws', () => {
+    vi.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
+      throw new Error('validation error')
+    })
+
+    const handle = (): any => sut(mockRequest(), validationStub)
+
+    expect(handle).toThrow()
+  })
+
   it('should return body if all validations pass', () => {
     const request = mockRequest()
 
