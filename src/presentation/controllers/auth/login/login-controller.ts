@@ -13,6 +13,7 @@ import {
   serverError,
   unauthorized
 } from '@/presentation/helpers/http'
+import { bodyValidation } from '@/presentation/utils'
 
 export class LoginController implements Controller {
   constructor(
@@ -22,6 +23,7 @@ export class LoginController implements Controller {
 
   async handle(httpRequest: HttpRequest<LoginRequest>): Promise<HttpResponse> {
     try {
+      bodyValidation(httpRequest, this.validation)
       const validationError = this.validation.validate(httpRequest.body)
       if (validationError) {
         return badRequest(validationError)

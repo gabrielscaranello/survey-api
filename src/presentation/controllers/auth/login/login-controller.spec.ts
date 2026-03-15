@@ -11,6 +11,11 @@ import {
 
 import { LoginController } from './login-controller'
 
+const mockedBodyValidation = vi.fn()
+vi.mock('@/presentation/utils', () => ({
+  bodyValidation: (...args: []): any => mockedBodyValidation(...args)
+}))
+
 const makeFakeRequest = (): HttpRequest<LoginRequest> => ({
   body: {
     email: 'any_email@mail.com',
@@ -55,14 +60,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Login Controller', () => {
-  it('should call Validation with correct values', async () => {
+  it('should call bodyValidation with correct values', async () => {
     const request = makeFakeRequest()
     const { sut, validationStub } = makeSut()
-    const validateSpy = vi.spyOn(validationStub, 'validate')
 
     await sut.handle(request)
 
-    expect(validateSpy).toHaveBeenCalledWith(request.body)
+    expect(mockedBodyValidation).toHaveBeenCalledWith(request, validationStub)
   })
 
   it('should return 400 if Validation returns an error', async () => {
