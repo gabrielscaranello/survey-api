@@ -14,6 +14,7 @@ import {
   ok,
   serverError
 } from '@/presentation/helpers/http'
+import { bodyValidation } from '@/presentation/utils'
 
 export class SignupController implements Controller {
   constructor(
@@ -24,12 +25,12 @@ export class SignupController implements Controller {
 
   async handle(httpRequest: HttpRequest<SignUpRequest>): Promise<HttpResponse> {
     try {
-      const validationError = this.validation.validate(httpRequest.body)
-      if (validationError) {
-        return badRequest(validationError)
+      const { error, body } = bodyValidation(httpRequest, this.validation)
+      if (error) {
+        return badRequest(error)
       }
 
-      const { name, email, password } = httpRequest.body
+      const { name, email, password } = body
       await this.addAccount.add({ name, email, password })
       const accessToken = await this.authentication.auth({ email, password })
 
