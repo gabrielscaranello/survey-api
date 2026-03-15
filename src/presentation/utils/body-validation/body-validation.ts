@@ -5,14 +5,14 @@ import { InvalidRequestError } from '@/presentation/errors'
 
 export const bodyValidation = <T>(
   request: HttpRequest<T>,
-  _validation: Validation
+  validation: Validation
 ): BodyValidationResult<T> => {
   if (!request.body) {
-    return {
-      error: new InvalidRequestError('no request body provided'),
-      body: null
-    }
+    const error = new InvalidRequestError('no request body provided')
+    return { error, body: null }
   }
+
+  validation.validate(request.body)
 
   return { error: null, body: request.body }
 }

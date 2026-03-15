@@ -24,10 +24,21 @@ describe('Body Validation', () => {
     expect(body).toBe(null)
   })
 
+  it('should call Validation with correct body', () => {
+    const request = mockRequest()
+    const validateSpy = vi.spyOn(validationStub, 'validate')
+
+    sut(request, validationStub)
+
+    expect(validateSpy).toHaveBeenCalledWith(request.body)
+  })
+
   it('should return body if all validations pass', () => {
+    const request = mockRequest()
+
     const { error, body } = sut(mockRequest(), validationStub)
 
     expect(error).toBe(null)
-    expect(body).toEqual(mockRequest().body)
+    expect(body).toEqual(request.body)
   })
 })
