@@ -33,6 +33,16 @@ describe('Body Validation', () => {
     expect(validateSpy).toHaveBeenCalledWith(request.body)
   })
 
+  it('should return Validation error if validation fails', () => {
+    const validationError = new Error('validation error')
+    vi.spyOn(validationStub, 'validate').mockReturnValueOnce(validationError)
+
+    const { error, body } = sut(mockRequest(), validationStub)
+
+    expect(error).toBe(validationError)
+    expect(body).toBe(null)
+  })
+
   it('should return body if all validations pass', () => {
     const request = mockRequest()
 

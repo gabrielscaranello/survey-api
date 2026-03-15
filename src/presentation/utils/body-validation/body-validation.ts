@@ -12,7 +12,10 @@ export const bodyValidation = <T>(
     return { error, body: null }
   }
 
-  validation.validate(request.body)
+  const error = validation.validate(request.body)
+  if (error) {
+    return { error, body: null }
+  }
 
   return { error: null, body: request.body }
 }
