@@ -11,7 +11,10 @@ import {
 
 import { LoginController } from './login-controller'
 
-const mockedBodyValidation = vi.fn()
+const mockedBodyValidation = vi
+  .fn()
+  .mockImplementation(({ body }: Record<string, object>) => ({ body }))
+
 vi.mock('@/presentation/utils', () => ({
   bodyValidation: (...args: []): any => mockedBodyValidation(...args)
 }))
@@ -69,10 +72,10 @@ describe('Login Controller', () => {
     expect(mockedBodyValidation).toHaveBeenCalledWith(request, validationStub)
   })
 
-  it('should return 400 if Validation returns an error', async () => {
+  it('should return 400 if bodyValidation returns an error', async () => {
     const error = new Error('any_error')
-    const { sut, validationStub } = makeSut()
-    vi.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
+    mockedBodyValidation.mockReturnValueOnce({ error })
+    const { sut } = makeSut()
 
     const httpResponse = await sut.handle(makeFakeRequest())
 
