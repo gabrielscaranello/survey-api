@@ -123,7 +123,7 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = vi.spyOn(addAccountStub, 'add')
     const httpRequest = makeFakeRequest()
-    const { name, email, password } = httpRequest.body
+    const { name, email, password } = httpRequest.body!
 
     await sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith({ name, email, password })
@@ -150,7 +150,7 @@ describe('SignUp Controller', () => {
 
   it('should call Authentication with correct values', async () => {
     const request = makeFakeRequest()
-    const { email, password } = request.body
+    const { email, password } = request.body!
     const { sut, authenticationStub } = makeSut()
     const authSpy = vi.spyOn(authenticationStub, 'auth')
 

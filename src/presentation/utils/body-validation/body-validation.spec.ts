@@ -18,7 +18,7 @@ const mockRequest = (): HttpRequest<Record<string, string>> => ({
 
 describe('Body Validation', () => {
   it('should return an error if no body is provided', () => {
-    const { error, body } = sut({ body: undefined }, validationStub)
+    const { error, body } = sut({}, validationStub)
 
     expect(error).toEqual(new InvalidRequestError('no request body provided'))
     expect(body).toBe(null)

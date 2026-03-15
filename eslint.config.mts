@@ -52,8 +52,9 @@ export default defineConfig([
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
+      '@typescript-eslint/init-declarations': 'off',
       '@typescript-eslint/no-magic-numbers': 'off',
-      '@typescript-eslint/init-declarations': 'off'
+      '@typescript-eslint/no-non-null-assertion': 'off'
     }
   }
 ])
