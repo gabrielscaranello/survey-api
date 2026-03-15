@@ -6,6 +6,14 @@ import { badRequest, noContent, serverError } from '@/presentation/helpers/http'
 
 import { AddSurveyController } from './add-survey-controller'
 
+const mockedBodyValidation = vi
+  .fn()
+  .mockImplementation(({ body }: Record<string, object>) => ({ body }))
+
+vi.mock('@/presentation/utils', () => ({
+  bodyValidation: (...args: []): any => mockedBodyValidation(...args)
+}))
+
 const mockRequest = (): HttpRequest<AddSurveyRequest> => ({
   body: {
     question: 'any_question',
@@ -47,20 +55,19 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AddSurvey Controller', () => {
-  it('should call Validation with correct values', async () => {
-    const httpRequest = mockRequest()
+  it('should call bodyValidation with correct values', async () => {
+    const request = mockRequest()
     const { sut, validationStub } = makeSut()
-    const validateSpy = vi.spyOn(validationStub, 'validate')
 
-    await sut.handle(httpRequest)
+    await sut.handle(request)
 
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(mockedBodyValidation).toHaveBeenCalledWith(request, validationStub)
   })
 
-  it('should return 400 if validation fails', async () => {
+  it('should return 400 if bodyValidation returns an error', async () => {
     const error = new Error('any_error')
-    const { sut, validationStub } = makeSut()
-    vi.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
+    mockedBodyValidation.mockReturnValueOnce({ error })
+    const { sut } = makeSut()
 
     const httpResponse = await sut.handle(mockRequest())
 

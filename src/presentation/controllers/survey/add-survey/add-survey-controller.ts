@@ -8,6 +8,7 @@ import type {
 import type { AddSurveyRequest } from './add-survey.types'
 
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http'
+import { bodyValidation } from '@/presentation/utils'
 
 export class AddSurveyController implements Controller {
   constructor(
@@ -19,12 +20,12 @@ export class AddSurveyController implements Controller {
     httpRequest: HttpRequest<AddSurveyRequest>
   ): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const { error, body } = bodyValidation(httpRequest, this.validation)
       if (error) {
         return badRequest(error)
       }
 
-      const { question, answers } = httpRequest.body
+      const { question, answers } = body
       await this.addSurvey.add({ question, answers })
 
       return noContent()
