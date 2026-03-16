@@ -9,7 +9,7 @@ export class EmailValidation implements Validation {
     private readonly emailValidator: EmailValidator
   ) {}
 
-  validate(input: any): Error | null {
+  validate(input: Record<string, unknown>): Error | null {
     const isValid = this.emailValidator.isValid(String(input[this.fieldName]))
 
     if (!isValid) {
