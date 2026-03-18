@@ -59,4 +59,12 @@ describe('Auth Middleware', () => {
 
     expect(loadSpy).toHaveBeenCalledWith(request.headers?.Authorization, roles)
   })
+
+  it('should return 403 if loadAccountByToken returns null', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut()
+    vi.spyOn(loadAccountByTokenStub, 'load').mockResolvedValueOnce(null)
+    const response = await sut.handle(mockRequest())
+
+    expect(response).toEqual(forbidden(new AccessDeniedError()))
+  })
 })
