@@ -9,6 +9,7 @@ export enum HTTPStatusCode {
 
 export interface HttpRequest<T = any> {
   body?: T
+  headers?: Record<string, string>
 }
 
 export interface HttpResponse<T = any> {
